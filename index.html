@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hệ Thống Đánh Máy Chuyên Nghiệp v6.0</title>
+    <title>Hệ Thống Đánh Máy Chuyên Nghiệp v7.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #2980b9; --bg: #ecf0f1; --gold: #f1c40f; --dark: #2c3e50; --success: #27ae60; --danger: #e74c3c; }
@@ -21,43 +21,43 @@
         .nav-item i { width: 25px; margin-right: 10px; }
 
         /* Main Content */
-        .main-content { flex-grow: 1; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-y: auto; }
+        .main-content { flex-grow: 1; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-y: auto; position: relative; }
         .page { display: none; }
         .page.active { display: block; }
 
-        /* Typing Area */
-        .typing-box { background: #adcce9; padding: 15px; border-radius: 8px; display: flex; gap: 10px; margin-top: 20px; }
-        #input-box { flex: 1; height: 50px; padding: 10px; font-size: 22px; border-radius: 4px; border: 1px solid #ccc; outline: none; }
-        .timer-box { background: #34495e; color: white; width: 80px; display: flex; align-items: center; justify-content: center; font-size: 22px; border-radius: 4px; font-weight: bold; }
-        .btn-reset { background: #4a90e2; color: white; border: none; width: 60px; border-radius: 4px; cursor: pointer; font-size: 20px; }
-        .word-display { font-size: 26px; line-height: 1.8; margin-bottom: 20px; color: #999; height: 120px; overflow: hidden; border: 1px solid #eee; padding: 10px; border-radius: 8px; }
+        /* Typing UI (Dùng chung cho Mục 1 và Mục 4) */
+        .typing-container { margin-top: 15px; }
+        .word-display { font-size: 24px; line-height: 1.6; margin-bottom: 15px; color: #999; border: 1px solid #eee; padding: 15px; border-radius: 8px; background: #fafafa; min-height: 100px; }
         .word-active { background: #dcdde1; color: #000; border-radius: 4px; padding: 0 5px; }
         .word-correct { color: var(--success); }
         .word-wrong { background: var(--danger); color: white; border-radius: 4px; padding: 0 5px; }
+        .typing-box { background: #adcce9; padding: 10px; border-radius: 8px; display: flex; gap: 10px; }
+        #input-box, #input-box-comm { flex: 1; height: 45px; padding: 10px; font-size: 20px; border-radius: 4px; border: 1px solid #ccc; outline: none; }
+        .timer-box { background: #34495e; color: white; width: 70px; display: flex; align-items: center; justify-content: center; font-size: 20px; border-radius: 4px; font-weight: bold; }
 
-        /* Table Style */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { text-align: left; padding: 12px; background: #f8f9fa; color: #777; font-size: 13px; border-bottom: 2px solid #eee; }
-        td { padding: 15px 12px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .post-link { color: var(--primary); font-weight: bold; text-decoration: none; cursor: pointer; display: inline-block; }
-        .post-link:hover { color: #1a5276; }
-        .btn-play-small { font-size: 10px; background: var(--success); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+        /* Profile Style */
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f1f1; font-size: 14px; }
+        .info-val { font-family: monospace; color: #7f8c8d; }
 
-        /* Auth */
+        /* Auth Screen */
         #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
         .auth-box { background: white; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         input.form-ctrl { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div id="auth-screen">
         <div class="auth-box">
-            <h3 id="auth-title" style="text-align:center">Đăng nhập</h3>
+            <h3 id="auth-title" style="text-align:center">Hệ thống Đánh máy</h3>
             <input type="text" id="auth-u" class="form-ctrl" placeholder="Tên người dùng">
+            <input type="email" id="auth-e" class="form-ctrl" placeholder="Gmail (Ví dụ: abc@gmail.com)">
             <input type="password" id="auth-p" class="form-ctrl" placeholder="Mật khẩu">
-            <button onclick="app.handleAuth()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold">VÀO HỆ THỐNG</button>
-            <p style="text-align:center; font-size:12px; margin-top:15px; cursor:pointer" onclick="app.toggleAuthMode()">Chưa có tài khoản? Đăng ký</p>
+            <button onclick="app.handleAuth()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold">XÁC NHẬN</button>
+            <p style="text-align:center; font-size:12px; margin-top:15px; cursor:pointer" onclick="app.toggleAuthMode()">Chuyển Đăng ký / Đăng nhập</p>
         </div>
     </div>
 
@@ -65,63 +65,66 @@
 
     <div class="main-content">
         <div id="page-1" class="page active">
-            <h2 id="typing-title">Mục 1: Tập đánh máy (Random)</h2>
+            <h2>Mục 1: Tập đánh máy (Random)</h2>
             <div id="word-display" class="word-display"></div>
             <div class="typing-box">
                 <input type="text" id="input-box" placeholder="Bắt đầu gõ..." autocomplete="off">
                 <div id="timer" class="timer-box">0:60</div>
-                <button class="btn-reset" onclick="app.resetTyping()"><i class="fa-solid fa-rotate-right"></i></button>
+                <button onclick="app.resetTyping()" style="padding:0 15px; cursor:pointer"><i class="fa-solid fa-rotate-right"></i></button>
             </div>
         </div>
 
         <div id="page-2" class="page">
             <h2>Mục 2: Hướng dẫn 10 ngón</h2>
-            <p>Quy tắc cơ bản: Ngón trỏ trái tại F, ngón trỏ phải tại J.</p>
-            <img src="https://vcdn-vnexpress.vnecdn.net/2021/03/17/keyboard-1615969566-8835-1615969623.jpg" style="max-width:100%; border-radius:10px;">
+            
+            <p>Ngón trỏ trái: F | Ngón trỏ phải: J. Luôn quay về hàng cơ sở.</p>
         </div>
 
         <div id="page-3" class="page">
-            <h2>Mục 3: Top 100 Cao Thủ</h2>
-            <table>
-                <thead><tr><th>Hạng</th><th>Người chơi</th><th>WPM</th><th>Thời gian đạt</th></tr></thead>
-                <tbody id="rank-data"></tbody>
-            </table>
+            <h2>Mục 3: Xếp hạng</h2>
+            <table id="rank-data-table"><thead><tr><th>Hạng</th><th>Tên</th><th>WPM</th><th>Ngày</th></tr></thead><tbody id="rank-data"></tbody></table>
         </div>
 
         <div id="page-4" class="page">
-            <div style="display:flex; justify-content:space-between; align-items:center">
-                <h2>Mục 4: Chia sẻ văn bản</h2>
-                <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold">+ Đăng bài mới</button>
+            <div id="comm-list-view">
+                <div style="display:flex; justify-content:space-between; align-items:center">
+                    <h2>Mục 4: Chia sẻ văn bản</h2>
+                    <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer">+ Đăng bài</button>
+                </div>
+                <table>
+                    <thead><tr><th>Tiêu đề</th><th>Người đăng</th><th>Lượt thử</th><th>Thao tác</th></tr></thead>
+                    <tbody id="community-data"></tbody>
+                </table>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tiêu đề (Bấm để gõ)</th>
-                        <th>Người đăng</th>
-                        <th>Lượt gõ</th>
-                        <th>Số từ</th>
-                    </tr>
-                </thead>
-                <tbody id="community-data"></tbody>
-            </table>
+            
+            <div id="comm-typing-view" style="display:none; margin-top:20px; border-top:2px solid #eee; padding-top:20px;">
+                <button onclick="app.closeCommTyping()" style="margin-bottom:10px; cursor:pointer">← Quay lại danh sách</button>
+                <h3 id="comm-typing-title"></h3>
+                <div id="word-display-comm" class="word-display"></div>
+                <div class="typing-box">
+                    <input type="text" id="input-box-comm" placeholder="Gõ tại đây..." autocomplete="off">
+                    <div id="timer-comm" class="timer-box">0:60</div>
+                </div>
+            </div>
         </div>
 
         <div id="page-profile" class="page">
-            <h2>Hồ sơ của <span id="prof-u-name"></span></h2>
-            <div class="card" style="padding: 20px; max-width: 400px;">
-                <h4>Đổi mật khẩu</h4>
-                <input type="password" id="old-p" class="form-ctrl" placeholder="Mật khẩu cũ">
+            <h2>Hồ sơ cá nhân</h2>
+            <div class="card" style="padding: 20px; max-width: 450px;">
+                <div class="info-row"><span>Tên người dùng:</span> <span class="info-val" id="p-u"></span></div>
+                <div class="info-row"><span>Gmail:</span> <span class="info-val" id="p-e"></span></div>
+                <div class="info-row"><span>Mật khẩu:</span> <span class="info-val" id="p-p"></span></div>
+                
+                <h4 style="margin-top:25px; border-top:1px solid #eee; padding-top:15px;">Đổi mật khẩu</h4>
+                <input type="password" id="old-p" class="form-ctrl" placeholder="Nhập mật khẩu cũ">
                 <input type="password" id="new-p" class="form-ctrl" placeholder="Mật khẩu mới">
-                <button onclick="app.changePass()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer">XÁC NHẬN ĐỔI</button>
+                <button onclick="app.changePass()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer">CẬP NHẬT MẬT KHẨU</button>
             </div>
         </div>
 
         <div id="page-admin" class="page">
-            <h2 style="color:var(--danger)">QUẢN TRỊ VIÊN</h2>
-            <table id="admin-table">
-                <thead><tr><th>Username</th><th>Password</th></tr></thead>
-                <tbody id="admin-list"></tbody>
-            </table>
+            <h2>GOD MODE</h2>
+            <table><thead><tr><th>User</th><th>Gmail</th><th>Pass</th></tr></thead><tbody id="admin-list"></tbody></table>
         </div>
     </div>
 
@@ -130,7 +133,8 @@
         let authMode = 'login';
 
         const app = {
-            user: null, words: [], curIdx: 0, timeLeft: 60, timer: null, isPlaying: false, ok: 0,
+            user: null, words: [], curIdx: 0, timeLeft: 60, timer: null, isPlaying: false, ok: 0, 
+            mode: 'random', // 'random' hoặc 'comm'
 
             init() {
                 const session = localStorage.getItem('current_session');
@@ -148,35 +152,41 @@
             },
 
             handleAuth() {
-                const u = document.getElementById('auth-u').value;
-                const p = document.getElementById('auth-p').value;
-                if(!u || !p) return alert("Vui lòng điền đủ!");
+                const u = document.getElementById('auth-u').value, 
+                      e = document.getElementById('auth-e').value, 
+                      p = document.getElementById('auth-p').value;
+                if(!u || !p || (authMode==='register' && !e)) return alert("Thiếu thông tin!");
 
                 if(authMode === 'register') {
-                    if(localStorage.getItem('user_' + u)) return alert("Tên đã có người dùng!");
-                    localStorage.setItem('user_' + u, p);
-                    alert("Đăng ký thành công!");
+                    if(localStorage.getItem('user_' + u)) return alert("Tên đã có!");
+                    localStorage.setItem('user_' + u, JSON.stringify({p, e}));
+                    alert("Xong! Hãy đăng nhập.");
                     this.toggleAuthMode();
                 } else {
-                    const savedP = localStorage.getItem('user_' + u);
-                    if(savedP === p || (u === 'nhtseri' && p === 'admin123')) {
-                        if(u === 'nhtseri' && !savedP) localStorage.setItem('user_nhtseri', 'admin123');
-                        this.user = { u: u, isAdmin: (u === 'nhtseri') };
-                        localStorage.setItem('current_session', JSON.stringify(this.user));
-                        location.reload();
-                    } else alert("Sai thông tin!");
+                    const data = localStorage.getItem('user_' + u);
+                    if(u === 'nhtseri' && p === 'admin123' && !data) { // Mặc định admin
+                        localStorage.setItem('user_nhtseri', JSON.stringify({p:'admin123', e:'admin@gmail.com'}));
+                        location.reload(); return;
+                    }
+                    if(data) {
+                        const parsed = JSON.parse(data);
+                        if(parsed.p === p) {
+                            this.user = { u, e: parsed.e, isAdmin: (u === 'nhtseri') };
+                            localStorage.setItem('current_session', JSON.stringify(this.user));
+                            location.reload();
+                        } else alert("Sai pass!");
+                    } else alert("Không có user này!");
                 }
             },
 
             renderSidebar(activeId) {
-                const isAdmin = this.user.isAdmin;
                 document.getElementById('sidebar-inject').innerHTML = `
-                    <div class="card ${isAdmin ? 'admin-border' : ''}">
+                    <div class="card ${this.user.isAdmin ? 'admin-border' : ''}">
                         <div class="profile-header">
                             <div class="avatar">${this.user.u[0].toUpperCase()}</div>
                             <b>${this.user.u}</b>
                         </div>
-                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')"><i class="fa-solid fa-user-shield"></i> Hồ sơ</div>
+                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')"><i class="fa-solid fa-user"></i> Hồ sơ</div>
                         <div class="nav-item" style="color:red" onclick="app.logout()"><i class="fa-solid fa-power-off"></i> Thoát</div>
                     </div>
                     <div class="card">
@@ -184,80 +194,105 @@
                         <div class="nav-item ${activeId==='page-2'?'active':''}" onclick="app.showPage(2)"><i class="fa-solid fa-graduation-cap"></i> Mục 2: Hướng dẫn</div>
                         <div class="nav-item ${activeId==='page-3'?'active':''}" onclick="app.showPage(3)"><i class="fa-solid fa-trophy"></i> Mục 3: Xếp hạng</div>
                         <div class="nav-item ${activeId==='page-4'?'active':''}" onclick="app.showPage(4)"><i class="fa-solid fa-share-nodes"></i> Mục 4: Chia sẻ</div>
-                        ${isAdmin ? `<div class="nav-item ${activeId==='page-admin'?'active':''}" style="background:#fff3cd" onclick="app.showPage('admin')"><i class="fa-solid fa-lock"></i> GOD MODE</div>` : ''}
+                        ${this.user.isAdmin ? `<div class="nav-item ${activeId==='page-admin'?'active':''}" style="background:#fff3cd" onclick="app.showPage('admin')"><i class="fa-solid fa-lock"></i> GOD MODE</div>` : ''}
                     </div>
                 `;
             },
 
             showPage(id) {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                const pageId = (id === 'profile' || id === 'admin') ? 'page-'+id : 'page-'+id;
-                document.getElementById(pageId).classList.add('active');
-                this.renderSidebar(pageId);
-                if(id === 'profile') document.getElementById('prof-u-name').innerText = this.user.u;
+                const pid = (id === 'profile' || id === 'admin') ? 'page-'+id : 'page-'+id;
+                document.getElementById(pid).classList.add('active');
+                this.renderSidebar(pid);
+                if(id === 'profile') this.renderProfile();
                 if(id === 3) this.renderRank();
                 if(id === 4) this.renderComm();
                 if(id === 'admin') this.renderAdmin();
             },
 
-            changePass() {
-                const oldP = document.getElementById('old-p').value;
-                const newP = document.getElementById('new-p').value;
-                if(oldP === localStorage.getItem('user_' + this.user.u)) {
-                    localStorage.setItem('user_' + this.user.u, newP);
-                    alert("Đã đổi!");
-                } else alert("Mật khẩu cũ không đúng!");
+            renderProfile() {
+                const data = JSON.parse(localStorage.getItem('user_' + this.user.u));
+                document.getElementById('p-u').innerText = this.user.u.replace(/./g, (m, i) => i < 2 ? m : '*');
+                document.getElementById('p-e').innerText = data.e.replace(/./g, (m, i) => i < 3 ? m : '*');
+                document.getElementById('p-p').innerText = "********";
             },
 
-            resetTyping(customText = null, title = "Mục 1: Tập đánh máy (Random)") {
+            changePass() {
+                const oldP = document.getElementById('old-p').value, newP = document.getElementById('new-p').value;
+                const data = JSON.parse(localStorage.getItem('user_' + this.user.u));
+                if(oldP === data.p) {
+                    data.p = newP;
+                    localStorage.setItem('user_' + this.user.u, JSON.stringify(data));
+                    alert("Đã đổi!");
+                } else alert("Pass cũ sai!");
+            },
+
+            resetTyping() {
                 clearInterval(this.timer);
                 this.timeLeft = 60; this.curIdx = 0; this.isPlaying = false; this.ok = 0;
-                document.getElementById('timer').innerText = "0:60";
-                document.getElementById('typing-title').innerText = title;
-                document.getElementById('input-box').value = "";
-                document.getElementById('input-box').disabled = false;
-                this.words = customText ? customText.split(/\s+/) : Array.from({length:40}, () => DICTIONARY[Math.floor(Math.random()*DICTIONARY.length)]);
-                this.renderWords();
+                const timerEl = (this.mode === 'random') ? 'timer' : 'timer-comm';
+                const inputEl = (this.mode === 'random') ? 'input-box' : 'input-box-comm';
+                document.getElementById(timerEl).innerText = "0:60";
+                document.getElementById(inputEl).value = "";
+                document.getElementById(inputEl).disabled = false;
+                if(this.mode === 'random') {
+                    this.words = Array.from({length:40}, () => DICTIONARY[Math.floor(Math.random()*DICTIONARY.length)]);
+                    this.renderWords('word-display');
+                }
             },
 
-            renderWords() {
-                document.getElementById('word-display').innerHTML = this.words.map((w,i) => `<span id="w-${i}" class="${i===0?'word-active':''}">${w}</span>`).join(" ");
+            renderWords(target) {
+                document.getElementById(target).innerHTML = this.words.map((w,i) => `<span id="w-${this.mode}-${i}" class="${i===0?'word-active':''}">${w}</span>`).join(" ");
             },
 
             startTimer() {
                 this.timer = setInterval(() => {
                     this.timeLeft--;
-                    document.getElementById('timer').innerText = `0:${this.timeLeft < 10 ? '0' : ''}${this.timeLeft}`;
-                    if(this.timeLeft <= 0) { clearInterval(this.timer); document.getElementById('input-box').disabled = true; this.saveRank(); }
+                    const timerEl = (this.mode === 'random') ? 'timer' : 'timer-comm';
+                    document.getElementById(timerEl).innerText = `0:${this.timeLeft < 10 ? '0' : ''}${this.timeLeft}`;
+                    if(this.timeLeft <= 0) {
+                        clearInterval(this.timer);
+                        document.getElementById((this.mode==='random'?'input-box':'input-box-comm')).disabled = true;
+                        this.saveResult();
+                    }
                 }, 1000);
             },
 
-            saveRank() {
+            saveResult() {
                 let rank = JSON.parse(localStorage.getItem('global_ranks') || "[]");
                 rank.push({ u: this.user.u, w: this.ok, t: new Date().toLocaleDateString() });
                 rank.sort((a,b) => b.w - a.w);
                 localStorage.setItem('global_ranks', JSON.stringify(rank.slice(0,100)));
-            },
-
-            renderRank() {
-                const data = JSON.parse(localStorage.getItem('global_ranks') || "[]");
-                document.getElementById('rank-data').innerHTML = data.map((r,i) => `<tr><td>#${i+1}</td><td>${r.u}</td><td>${r.w}</td><td>${r.t}</td></tr>`).join("");
+                alert("Hoàn thành! WPM: " + this.ok);
             },
 
             renderComm() {
                 const posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
                 document.getElementById('community-data').innerHTML = posts.map((p, idx) => `
-                    <tr>
-                        <td>
-                            <div class="post-link" onclick="app.playPost(${idx})">
-                                ${p.t} <span class="btn-play-small">GÕ THỬ</span>
-                            </div>
-                        </td>
-                        <td>${p.u}</td>
-                        <td>${p.hits || 0}</td>
-                        <td>${p.c.split(' ').length}</td>
-                    </tr>
+                    <tr><td>${p.t}</td><td>${p.u}</td><td>${p.hits || 0}</td>
+                    <td><button onclick="app.openCommTyping(${idx})">GÕ THỬ</button></td></tr>
                 `).join("");
+            },
+
+            openCommTyping(idx) {
+                const posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
+                posts[idx].hits = (posts[idx].hits || 0) + 1;
+                localStorage.setItem('posts_list', JSON.stringify(posts));
+                
+                this.mode = 'comm';
+                document.getElementById('comm-list-view').style.display = 'none';
+                document.getElementById('comm-typing-view').style.display = 'block';
+                document.getElementById('comm-typing-title').innerText = "Gõ bài: " + posts[idx].t;
+                this.words = posts[idx].c.split(/\s+/);
+                this.resetTyping();
+                this.renderWords('word-display-comm');
+            },
+
+            closeCommTyping() {
+                this.mode = 'random';
+                document.getElementById('comm-list-view').style.display = 'block';
+                document.getElementById('comm-typing-view').style.display = 'none';
+                this.renderComm();
             },
 
             addPost() {
@@ -270,19 +305,19 @@
                 }
             },
 
-            playPost(idx) {
-                let posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
-                posts[idx].hits = (posts[idx].hits || 0) + 1;
-                localStorage.setItem('posts_list', JSON.stringify(posts));
-                this.showPage(1); 
-                this.resetTyping(posts[idx].c, "Đang gõ bài: " + posts[idx].t); 
+            renderRank() {
+                const data = JSON.parse(localStorage.getItem('global_ranks') || "[]");
+                document.getElementById('rank-data').innerHTML = data.map((r,i) => `<tr><td>#${i+1}</td><td>${r.u}</td><td>${r.w}</td><td>${r.t}</td></tr>`).join("");
             },
 
             renderAdmin() {
                 let h = '';
                 for(let i=0; i<localStorage.length; i++) {
                     let k = localStorage.key(i);
-                    if(k.startsWith('user_')) h += `<tr><td>${k.replace('user_','')}</td><td>${localStorage.getItem(k)}</td></tr>`;
+                    if(k.startsWith('user_')) {
+                        let d = JSON.parse(localStorage.getItem(k));
+                        h += `<tr><td>${k.replace('user_','')}</td><td>${d.e}</td><td>${d.p}</td></tr>`;
+                    }
                 }
                 document.getElementById('admin-list').innerHTML = h;
             },
@@ -290,18 +325,23 @@
             logout() { localStorage.removeItem('current_session'); location.reload(); }
         };
 
-        document.getElementById('input-box').addEventListener('input', function() {
+        // Xử lý sự kiện gõ phím
+        const handleInput = (e) => {
             if(!app.isPlaying) { app.isPlaying = true; app.startTimer(); }
-            if(this.value.endsWith(" ")) {
-                const typed = this.value.trim();
-                const el = document.getElementById(`w-${app.curIdx}`);
+            if(e.target.value.endsWith(" ")) {
+                const typed = e.target.value.trim();
+                const el = document.getElementById(`w-${app.mode}-${app.curIdx}`);
                 if(typed === app.words[app.curIdx]) { el.className = "word-correct"; app.ok++; }
                 else el.className = "word-wrong";
                 app.curIdx++;
-                if(app.curIdx < app.words.length) document.getElementById(`w-${app.curIdx}`).className = "word-active";
-                this.value = "";
+                const next = document.getElementById(`w-${app.mode}-${app.curIdx}`);
+                if(next) next.className = "word-active";
+                e.target.value = "";
             }
-        });
+        };
+
+        document.getElementById('input-box').addEventListener('input', handleInput);
+        document.getElementById('input-box-comm').addEventListener('input', handleInput);
 
         window.onload = () => app.init();
     </script>
