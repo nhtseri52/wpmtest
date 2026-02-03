@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hệ Thống Đánh Máy Chuyên Nghiệp v4.0</title>
+    <title>Hệ Thống Đánh Máy Chuyên Nghiệp v5.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #2980b9; --bg: #ecf0f1; --gold: #f1c40f; --dark: #2c3e50; --success: #27ae60; --danger: #e74c3c; }
@@ -15,7 +15,6 @@
         .profile-header { padding: 20px; text-align: center; border-bottom: 1px solid #eee; }
         .avatar { width: 60px; height: 60px; background: var(--dark); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 10px; }
         .admin-border { border: 3px solid var(--gold) !important; }
-        
         .nav-item { padding: 15px; display: flex; align-items: center; color: #555; border-bottom: 1px solid #f1f1f1; cursor: pointer; transition: 0.2s; font-size: 14px; }
         .nav-item:hover { background: #f9f9f9; }
         .nav-item.active { background: var(--primary); color: white; }
@@ -26,7 +25,7 @@
         .page { display: none; }
         .page.active { display: block; }
 
-        /* Mục 1: Typing UI */
+        /* Typing UI */
         .typing-box { background: #adcce9; padding: 15px; border-radius: 8px; display: flex; gap: 10px; margin-top: 20px; }
         #input-box { flex: 1; height: 50px; padding: 10px; font-size: 22px; border-radius: 4px; border: 1px solid #ccc; outline: none; }
         .timer-box { background: #34495e; color: white; width: 80px; display: flex; align-items: center; justify-content: center; font-size: 22px; border-radius: 4px; font-weight: bold; }
@@ -36,19 +35,19 @@
         .word-correct { color: var(--success); }
         .word-wrong { background: var(--danger); color: white; border-radius: 4px; padding: 0 5px; }
 
-        /* Mục 2: Keyboard Style */
-        .guide-section { line-height: 1.6; }
-        .kb-img { width: 100%; max-width: 600px; border-radius: 10px; margin: 20px 0; border: 1px solid #ddd; }
-        .finger-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .finger-table td { padding: 10px; border: 1px solid #eee; font-size: 14px; }
-        .finger-table b { color: var(--primary); }
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; padding: 12px; background: #f8f9fa; color: #777; font-size: 13px; border-bottom: 2px solid #eee; }
+        td { padding: 15px 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .status-tag { background: var(--success); color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; font-weight: bold; }
+        .post-link { color: var(--primary); font-weight: bold; text-decoration: none; cursor: pointer; font-size: 15px; }
+        .post-link:hover { text-decoration: underline; }
+        .meta-text { font-size: 12px; color: #999; margin-top: 4px; }
 
-        /* Auth/Login */
+        /* Auth/Form */
         #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
         .auth-box { background: white; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         input.form-ctrl { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
@@ -77,46 +76,34 @@
         </div>
 
         <div id="page-2" class="page">
-            <div class="guide-section">
-                <h2>Mục 2: Hướng dẫn gõ 10 ngón chuyên nghiệp</h2>
-                <p>Gõ 10 ngón giúp tăng tốc độ làm việc và giảm mỏi mắt vì bạn không cần nhìn bàn phím.</p>
-                
-                <img src="https://vcdn-vnexpress.vnecdn.net/2021/03/17/keyboard-1615969566-8835-1615969623.jpg" class="kb-img" alt="Keyboard Guide">
-                
-                <h3>Quy tắc đặt tay (Hàng cơ sở):</h3>
-                <table class="finger-table">
-                    <tr>
-                        <td><b>Tay Trái:</b></td>
-                        <td>Ngón Út (A), Ngón Áp Út (S), Ngón Giữa (D), Ngón Trỏ (F)</td>
-                    </tr>
-                    <tr>
-                        <td><b>Tay Phải:</b></td>
-                        <td>Ngón Trỏ (J), Ngón Giữa (K), Ngón Áp Út (L), Ngón Út (;)</td>
-                    </tr>
-                    <tr>
-                        <td><b>Ngón Cái:</b></td>
-                        <td>Chỉ dùng để bấm phím <b>Space (Dấu cách)</b></td>
-                    </tr>
-                </table>
-                <p style="margin-top:15px; color: #e67e22; font-weight: bold;">Lưu ý: Luôn để hai ngón trỏ lên phím F và J (có gờ nổi).</p>
-            </div>
+            <h2>Mục 2: Hướng dẫn 10 ngón</h2>
+            
+            <p style="margin-top:20px;">Quy tắc: Ngón trỏ trái phím <b>F</b>, ngón trỏ phải phím <b>J</b>. Không nhìn bàn phím khi gõ.</p>
         </div>
 
         <div id="page-3" class="page">
             <h2>Mục 3: Top 100 Cao Thủ</h2>
             <table>
-                <thead><tr><th>Hạng</th><th>Tên</th><th>WPM</th><th>Thời gian đạt</th></tr></thead>
+                <thead><tr><th>Hạng</th><th>Người chơi</th><th>WPM</th><th>Ngày đạt</th></tr></thead>
                 <tbody id="rank-data"></tbody>
             </table>
         </div>
 
         <div id="page-4" class="page">
-            <div style="display:flex; justify-content:space-between">
-                <h2>Mục 4: Chia sẻ văn bản</h2>
-                <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer">+ Bài mới</button>
+            <div style="display:flex; justify-content:space-between; align-items:center">
+                <h2>Mục 4: Cộng đồng chia sẻ</h2>
+                <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold">+ Tạo bài mới</button>
             </div>
-            <table style="margin-top:15px">
-                <thead><tr><th>Trạng thái</th><th>Tiêu đề</th><th>Độ dài</th></tr></thead>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="100">Trạng thái</th>
+                        <th>Tiêu đề / Nội dung</th>
+                        <th width="120">Người tạo</th>
+                        <th width="100">Lượt thử</th>
+                        <th width="100">Độ dài</th>
+                    </tr>
+                </thead>
                 <tbody id="community-data"></tbody>
             </table>
         </div>
@@ -134,8 +121,8 @@
         </div>
 
         <div id="page-admin" class="page">
-            <h2 style="color:var(--danger)">GOD MODE - TẤT CẢ TÀI KHOẢN</h2>
-            <table id="admin-table">
+            <h2 style="color:var(--danger)">GOD MODE - QUẢN LÝ USER</h2>
+            <table>
                 <thead><tr><th>Username</th><th>Password</th></tr></thead>
                 <tbody id="admin-list"></tbody>
             </table>
@@ -172,7 +159,7 @@
                 if(authMode === 'register') {
                     if(localStorage.getItem('user_' + u)) return alert("Tên đã tồn tại!");
                     localStorage.setItem('user_' + u, p);
-                    alert("Đăng ký xong! Mời đăng nhập.");
+                    alert("Đăng ký thành công!");
                     this.toggleAuthMode();
                 } else {
                     const savedP = localStorage.getItem('user_' + u);
@@ -181,7 +168,7 @@
                         this.user = { u: u, isAdmin: (u === 'nhtseri') };
                         localStorage.setItem('current_session', JSON.stringify(this.user));
                         location.reload();
-                    } else alert("Sai thông tin!");
+                    } else alert("Sai tài khoản/mật khẩu!");
                 }
             },
 
@@ -224,16 +211,16 @@
                 if(oldP === currentP) {
                     localStorage.setItem('user_' + this.user.u, newP);
                     alert("Đã đổi!");
-                } else alert("Mật khẩu cũ sai!");
+                } else alert("Mật khẩu cũ không đúng!");
             },
 
-            resetTyping() {
+            resetTyping(customText = null) {
                 clearInterval(this.timer);
                 this.timeLeft = 60; this.curIdx = 0; this.isPlaying = false; this.ok = 0;
                 document.getElementById('timer').innerText = "0:60";
                 document.getElementById('input-box').value = "";
                 document.getElementById('input-box').disabled = false;
-                this.words = Array.from({length:50}, () => DICTIONARY[Math.floor(Math.random()*DICTIONARY.length)]);
+                this.words = customText ? customText.split(/\s+/) : Array.from({length:50}, () => DICTIONARY[Math.floor(Math.random()*DICTIONARY.length)]);
                 this.renderWords();
             },
 
@@ -251,7 +238,7 @@
 
             saveRank() {
                 let rank = JSON.parse(localStorage.getItem('global_ranks') || "[]");
-                rank.push({ u: this.user.u, w: this.ok, t: new Date().toLocaleString() });
+                rank.push({ u: this.user.u, w: this.ok, t: new Date().toLocaleDateString() });
                 rank.sort((a,b) => b.w - a.w);
                 localStorage.setItem('global_ranks', JSON.stringify(rank.slice(0,100)));
             },
@@ -263,26 +250,43 @@
 
             renderComm() {
                 const posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
-                document.getElementById('community-data').innerHTML = posts.map(p => `<tr><td><span style="background:green;color:white;padding:2px 5px;border-radius:3px;font-size:10px">công khai</span></td><td><b style="color:blue;cursor:pointer" onclick="app.playPost('${btoa(p.c)}')">${p.t}</b></td><td>${p.c.split(' ').length} từ</td></tr>`).join("");
+                document.getElementById('community-data').innerHTML = posts.map((p, idx) => `
+                    <tr>
+                        <td><span class="status-tag">công khai</span></td>
+                        <td>
+                            <a class="post-link" onclick="app.playPost('${btoa(p.c)}', ${idx})">${p.t}</a>
+                            <div class="meta-text">${p.c.substring(0, 40)}...</div>
+                        </td>
+                        <td><b>${p.u || 'Ẩn danh'}</b></td>
+                        <td><i class="fa-solid fa-play" style="font-size:10px"></i> ${p.hits || 0} lần</td>
+                        <td>${p.c.split(' ').length} từ</td>
+                    </tr>
+                `).join("");
             },
 
             addPost() {
-                const t = prompt("Tiêu đề:"), c = prompt("Nội dung:");
+                const t = prompt("Tiêu đề văn bản:"), c = prompt("Nội dung văn bản:");
                 if(t && c) {
                     let posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
-                    posts.push({t, c});
+                    posts.push({t, c, u: this.user.u, hits: 0});
                     localStorage.setItem('posts_list', JSON.stringify(posts));
                     this.renderComm();
                 }
             },
 
-            playPost(enc) { this.showPage(1); this.resetTyping(atob(enc)); },
+            playPost(enc, idx) {
+                let posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
+                posts[idx].hits = (posts[idx].hits || 0) + 1; // Tăng lượt thử
+                localStorage.setItem('posts_list', JSON.stringify(posts));
+                this.showPage(1); 
+                this.resetTyping(atob(enc)); 
+            },
 
             renderAdmin() {
                 let h = '';
                 for(let i=0; i<localStorage.length; i++) {
                     let k = localStorage.key(i);
-                    if(k.startsWith('user_')) h += `<tr><td>${k.replace('user_','')}</td><td>${localStorage.getItem(k)}</td></tr>`;
+                    if(k.startsWith('user_')) h += `<tr><td><b>${k.replace('user_','')}</b></td><td>${localStorage.getItem(k)}</td></tr>`;
                 }
                 document.getElementById('admin-list').innerHTML = h;
             },
