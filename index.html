@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hệ Thống Đánh Máy Chuyên Nghiệp</title>
+    <title>Hệ Thống Đánh Máy Chuyên Nghiệp v4.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #2980b9; --bg: #ecf0f1; --gold: #f1c40f; --dark: #2c3e50; --success: #27ae60; --danger: #e74c3c; }
@@ -21,32 +21,34 @@
         .nav-item.active { background: var(--primary); color: white; }
         .nav-item i { width: 25px; margin-right: 10px; }
 
-        /* Content */
+        /* Content Area */
         .main-content { flex-grow: 1; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-y: auto; }
         .page { display: none; }
         .page.active { display: block; }
 
-        /* Typing UI (image_c5335d.png) */
+        /* Mục 1: Typing UI */
         .typing-box { background: #adcce9; padding: 15px; border-radius: 8px; display: flex; gap: 10px; margin-top: 20px; }
         #input-box { flex: 1; height: 50px; padding: 10px; font-size: 22px; border-radius: 4px; border: 1px solid #ccc; outline: none; }
         .timer-box { background: #34495e; color: white; width: 80px; display: flex; align-items: center; justify-content: center; font-size: 22px; border-radius: 4px; font-weight: bold; }
         .btn-reset { background: #4a90e2; color: white; border: none; width: 60px; border-radius: 4px; cursor: pointer; font-size: 20px; }
-
         .word-display { font-size: 26px; line-height: 1.8; margin-bottom: 20px; color: #999; height: 120px; overflow: hidden; border: 1px solid #eee; padding: 10px; border-radius: 8px; }
         .word-active { background: #dcdde1; color: #000; border-radius: 4px; padding: 0 5px; }
         .word-correct { color: var(--success); }
         .word-wrong { background: var(--danger); color: white; border-radius: 4px; padding: 0 5px; }
 
-        /* Form */
-        input.form-ctrl { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        .btn-main { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        /* Mục 2: Keyboard Style */
+        .guide-section { line-height: 1.6; }
+        .kb-img { width: 100%; max-width: 600px; border-radius: 10px; margin: 20px 0; border: 1px solid #ddd; }
+        .finger-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .finger-table td { padding: 10px; border: 1px solid #eee; font-size: 14px; }
+        .finger-table b { color: var(--primary); }
 
-        /* Auth Screen */
+        /* Auth/Login */
         #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
         .auth-box { background: white; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        input.form-ctrl { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
@@ -56,10 +58,8 @@
             <h3 id="auth-title" style="text-align:center">Đăng nhập</h3>
             <input type="text" id="auth-u" class="form-ctrl" placeholder="Tên người dùng">
             <input type="password" id="auth-p" class="form-ctrl" placeholder="Mật khẩu">
-            <button class="btn-main" style="width:100%" onclick="app.handleAuth()">XÁC NHẬN</button>
-            <p style="text-align:center; font-size:12px; color: #666; cursor:pointer" onclick="app.toggleAuthMode()">
-                Chưa có tài khoản? Đăng ký tại đây
-            </p>
+            <button onclick="app.handleAuth()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold">XÁC NHẬN</button>
+            <p style="text-align:center; font-size:12px; margin-top:15px; cursor:pointer" onclick="app.toggleAuthMode()">Chưa có tài khoản? Đăng ký</p>
         </div>
     </div>
 
@@ -76,12 +76,36 @@
             </div>
         </div>
 
+        <div id="page-2" class="page">
+            <div class="guide-section">
+                <h2>Mục 2: Hướng dẫn gõ 10 ngón chuyên nghiệp</h2>
+                <p>Gõ 10 ngón giúp tăng tốc độ làm việc và giảm mỏi mắt vì bạn không cần nhìn bàn phím.</p>
+                
+                <img src="https://vcdn-vnexpress.vnecdn.net/2021/03/17/keyboard-1615969566-8835-1615969623.jpg" class="kb-img" alt="Keyboard Guide">
+                
+                <h3>Quy tắc đặt tay (Hàng cơ sở):</h3>
+                <table class="finger-table">
+                    <tr>
+                        <td><b>Tay Trái:</b></td>
+                        <td>Ngón Út (A), Ngón Áp Út (S), Ngón Giữa (D), Ngón Trỏ (F)</td>
+                    </tr>
+                    <tr>
+                        <td><b>Tay Phải:</b></td>
+                        <td>Ngón Trỏ (J), Ngón Giữa (K), Ngón Áp Út (L), Ngón Út (;)</td>
+                    </tr>
+                    <tr>
+                        <td><b>Ngón Cái:</b></td>
+                        <td>Chỉ dùng để bấm phím <b>Space (Dấu cách)</b></td>
+                    </tr>
+                </table>
+                <p style="margin-top:15px; color: #e67e22; font-weight: bold;">Lưu ý: Luôn để hai ngón trỏ lên phím F và J (có gờ nổi).</p>
+            </div>
+        </div>
+
         <div id="page-3" class="page">
             <h2>Mục 3: Top 100 Cao Thủ</h2>
             <table>
-                <thead>
-                    <tr><th>Hạng</th><th>Tên</th><th>WPM</th><th>Ngày đạt</th></tr>
-                </thead>
+                <thead><tr><th>Hạng</th><th>Tên</th><th>WPM</th><th>Thời gian đạt</th></tr></thead>
                 <tbody id="rank-data"></tbody>
             </table>
         </div>
@@ -89,31 +113,31 @@
         <div id="page-4" class="page">
             <div style="display:flex; justify-content:space-between">
                 <h2>Mục 4: Chia sẻ văn bản</h2>
-                <button class="btn-main" onclick="app.addPost()">+ Tạo bài mới</button>
+                <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer">+ Bài mới</button>
             </div>
-            <table id="comm-table">
+            <table style="margin-top:15px">
                 <thead><tr><th>Trạng thái</th><th>Tiêu đề</th><th>Độ dài</th></tr></thead>
                 <tbody id="community-data"></tbody>
             </table>
         </div>
 
         <div id="page-profile" class="page">
-            <h2>Hồ sơ cá nhân</h2>
+            <h2>Hồ sơ & Bảo mật</h2>
             <div class="card" style="padding: 20px; max-width: 400px;">
-                <p><b>Tên:</b> <span id="prof-u"></span></p>
+                <p><b>Tên tài khoản:</b> <span id="prof-u"></span></p>
                 <hr>
                 <h4>Đổi mật khẩu</h4>
                 <input type="password" id="old-p" class="form-ctrl" placeholder="Mật khẩu cũ">
                 <input type="password" id="new-p" class="form-ctrl" placeholder="Mật khẩu mới">
-                <button class="btn-main" onclick="app.changePass()">CẬP NHẬT MẬT KHẨU</button>
+                <button onclick="app.changePass()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer">CẬP NHẬT</button>
             </div>
         </div>
 
         <div id="page-admin" class="page">
-            <h2 style="color:var(--danger)">QUẢN LÝ TÀI KHOẢN (GOD MODE)</h2>
-            <table>
+            <h2 style="color:var(--danger)">GOD MODE - TẤT CẢ TÀI KHOẢN</h2>
+            <table id="admin-table">
                 <thead><tr><th>Username</th><th>Password</th></tr></thead>
-                <tbody id="admin-user-list"></tbody>
+                <tbody id="admin-list"></tbody>
             </table>
         </div>
     </div>
@@ -137,29 +161,27 @@
 
             toggleAuthMode() {
                 authMode = (authMode === 'login') ? 'register' : 'login';
-                document.getElementById('auth-title').innerText = (authMode === 'login') ? 'Đăng nhập' : 'Đăng ký tài khoản';
+                document.getElementById('auth-title').innerText = (authMode === 'login') ? 'Đăng nhập' : 'Đăng ký';
             },
 
             handleAuth() {
                 const u = document.getElementById('auth-u').value;
                 const p = document.getElementById('auth-p').value;
-                if(!u || !p) return alert("Vui lòng nhập đủ!");
+                if(!u || !p) return alert("Thiếu thông tin!");
 
                 if(authMode === 'register') {
-                    if(localStorage.getItem('user_' + u)) return alert("Tên này đã có người dùng!");
+                    if(localStorage.getItem('user_' + u)) return alert("Tên đã tồn tại!");
                     localStorage.setItem('user_' + u, p);
-                    alert("Đăng ký thành công! Hãy đăng nhập.");
+                    alert("Đăng ký xong! Mời đăng nhập.");
                     this.toggleAuthMode();
                 } else {
                     const savedP = localStorage.getItem('user_' + u);
-                    if(savedP === p || (u === 'nhtseri' && p === 'admin123')) { // Acc admin mặc định nếu chưa tạo
+                    if(savedP === p || (u === 'nhtseri' && p === 'admin123')) {
                         if(u === 'nhtseri' && !savedP) localStorage.setItem('user_nhtseri', 'admin123');
                         this.user = { u: u, isAdmin: (u === 'nhtseri') };
                         localStorage.setItem('current_session', JSON.stringify(this.user));
                         location.reload();
-                    } else {
-                        alert("Sai tài khoản hoặc mật khẩu!");
-                    }
+                    } else alert("Sai thông tin!");
                 }
             },
 
@@ -170,13 +192,13 @@
                         <div class="profile-header">
                             <div class="avatar">${this.user.u[0].toUpperCase()}</div>
                             <b>${this.user.u}</b>
-                            ${isAdmin ? '<div style="color:var(--gold); font-size:10px; font-weight:bold">ADMIN</div>' : ''}
                         </div>
-                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')"><i class="fa-solid fa-user"></i> Hồ sơ & Bảo mật</div>
+                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')"><i class="fa-solid fa-user-gear"></i> Hồ sơ cá nhân</div>
                         <div class="nav-item" style="color:red" onclick="app.logout()"><i class="fa-solid fa-power-off"></i> Đăng xuất</div>
                     </div>
                     <div class="card">
                         <div class="nav-item ${activeId==='page-1'?'active':''}" onclick="app.showPage(1)"><i class="fa-solid fa-keyboard"></i> Mục 1: Tập gõ</div>
+                        <div class="nav-item ${activeId==='page-2'?'active':''}" onclick="app.showPage(2)"><i class="fa-solid fa-graduation-cap"></i> Mục 2: Hướng dẫn</div>
                         <div class="nav-item ${activeId==='page-3'?'active':''}" onclick="app.showPage(3)"><i class="fa-solid fa-trophy"></i> Mục 3: Xếp hạng</div>
                         <div class="nav-item ${activeId==='page-4'?'active':''}" onclick="app.showPage(4)"><i class="fa-solid fa-share-nodes"></i> Mục 4: Chia sẻ</div>
                         ${isAdmin ? `<div class="nav-item ${activeId==='page-admin'?'active':''}" style="background:#fff3cd" onclick="app.showPage('admin')"><i class="fa-solid fa-user-shield"></i> GOD MODE</div>` : ''}
@@ -186,9 +208,9 @@
 
             showPage(id) {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                const target = (id === 'profile' || id === 'admin') ? 'page-'+id : 'page-'+id;
-                document.getElementById(target).classList.add('active');
-                this.renderSidebar(target);
+                const pageId = (id === 'profile' || id === 'admin') ? 'page-'+id : 'page-'+id;
+                document.getElementById(pageId).classList.add('active');
+                this.renderSidebar(pageId);
                 if(id === 'profile') document.getElementById('prof-u').innerText = this.user.u;
                 if(id === 3) this.renderRank();
                 if(id === 4) this.renderComm();
@@ -199,15 +221,10 @@
                 const oldP = document.getElementById('old-p').value;
                 const newP = document.getElementById('new-p').value;
                 const currentP = localStorage.getItem('user_' + this.user.u);
-                
                 if(oldP === currentP) {
                     localStorage.setItem('user_' + this.user.u, newP);
-                    alert("Đổi mật khẩu thành công!");
-                    document.getElementById('old-p').value = "";
-                    document.getElementById('new-p').value = "";
-                } else {
-                    alert("Mật khẩu cũ không chính xác!");
-                }
+                    alert("Đã đổi!");
+                } else alert("Mật khẩu cũ sai!");
             },
 
             resetTyping() {
@@ -228,20 +245,15 @@
                 this.timer = setInterval(() => {
                     this.timeLeft--;
                     document.getElementById('timer').innerText = `0:${this.timeLeft < 10 ? '0' : ''}${this.timeLeft}`;
-                    if(this.timeLeft <= 0) {
-                        clearInterval(this.timer);
-                        document.getElementById('input-box').disabled = true;
-                        this.saveRank();
-                    }
+                    if(this.timeLeft <= 0) { clearInterval(this.timer); document.getElementById('input-box').disabled = true; this.saveRank(); }
                 }, 1000);
             },
 
             saveRank() {
                 let rank = JSON.parse(localStorage.getItem('global_ranks') || "[]");
-                rank.push({ u: this.user.u, w: this.ok, t: new Date().toLocaleDateString() });
+                rank.push({ u: this.user.u, w: this.ok, t: new Date().toLocaleString() });
                 rank.sort((a,b) => b.w - a.w);
                 localStorage.setItem('global_ranks', JSON.stringify(rank.slice(0,100)));
-                alert("Hoàn thành! WPM: " + this.ok);
             },
 
             renderRank() {
@@ -249,13 +261,30 @@
                 document.getElementById('rank-data').innerHTML = data.map((r,i) => `<tr><td>#${i+1}</td><td>${r.u}</td><td>${r.w}</td><td>${r.t}</td></tr>`).join("");
             },
 
+            renderComm() {
+                const posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
+                document.getElementById('community-data').innerHTML = posts.map(p => `<tr><td><span style="background:green;color:white;padding:2px 5px;border-radius:3px;font-size:10px">công khai</span></td><td><b style="color:blue;cursor:pointer" onclick="app.playPost('${btoa(p.c)}')">${p.t}</b></td><td>${p.c.split(' ').length} từ</td></tr>`).join("");
+            },
+
+            addPost() {
+                const t = prompt("Tiêu đề:"), c = prompt("Nội dung:");
+                if(t && c) {
+                    let posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
+                    posts.push({t, c});
+                    localStorage.setItem('posts_list', JSON.stringify(posts));
+                    this.renderComm();
+                }
+            },
+
+            playPost(enc) { this.showPage(1); this.resetTyping(atob(enc)); },
+
             renderAdmin() {
                 let h = '';
-                for(let i=0; i<localStorage.length; i++){
+                for(let i=0; i<localStorage.length; i++) {
                     let k = localStorage.key(i);
                     if(k.startsWith('user_')) h += `<tr><td>${k.replace('user_','')}</td><td>${localStorage.getItem(k)}</td></tr>`;
                 }
-                document.getElementById('admin-user-list').innerHTML = h;
+                document.getElementById('admin-list').innerHTML = h;
             },
 
             logout() { localStorage.removeItem('current_session'); location.reload(); }
@@ -267,7 +296,7 @@
                 const typed = this.value.trim();
                 const el = document.getElementById(`w-${app.curIdx}`);
                 if(typed === app.words[app.curIdx]) { el.className = "word-correct"; app.ok++; }
-                else { el.className = "word-wrong"; }
+                else el.className = "word-wrong";
                 app.curIdx++;
                 if(app.curIdx < app.words.length) document.getElementById(`w-${app.curIdx}`).className = "word-active";
                 this.value = "";
