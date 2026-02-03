@@ -3,29 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Master - God Mode Fix</title>
+    <title>Typing Master Pro - God Mode nhtseri</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #4a90e2; --bg: #f4f7f9; --text: #333; --success: #5cb85c; --error: #d9534f; --admin-gold: #f39c12; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--text); }
-        .main-container { display: flex; gap: 20px; max-width: 1350px; margin: auto; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--text); }
+        .main-container { display: flex; gap: 20px; max-width: 1400px; margin: auto; }
 
         /* Sidebar */
         .sidebar { width: 300px; flex-shrink: 0; }
         .menu-card { background: white; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .menu-item { padding: 12px 15px; display: flex; align-items: center; cursor: pointer; border-bottom: 1px solid #eee; font-size: 14px; color: #444; }
+        .menu-item { padding: 13px 15px; display: flex; align-items: center; cursor: pointer; border-bottom: 1px solid #eee; font-size: 14px; transition: 0.2s; }
         .menu-item:hover { background: #f8f9fa; }
-        .menu-item.active { background: var(--primary); color: white; }
-        .menu-item i { width: 25px; margin-right: 10px; }
-        
-        .admin-frame { border: 2px solid var(--admin-gold) !important; padding: 10px; }
-        .admin-badge { background: var(--admin-gold); color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
+        .menu-item.active { background: var(--primary); color: white; border-bottom: none; }
+        .menu-item i { width: 25px; margin-right: 10px; font-size: 16px; }
+
+        /* Admin Decorations */
+        .admin-frame { border: 2px solid var(--admin-gold) !important; position: relative; background: #fffdf5 !important; }
+        .admin-badge { background: var(--admin-gold); color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: auto; text-transform: uppercase; }
 
         /* Content Area */
-        .content { flex-grow: 1; background: white; padding: 30px; border-radius: 8px; border: 1px solid #ddd; min-height: 750px; }
+        .content { flex-grow: 1; background: white; padding: 30px; border-radius: 8px; border: 1px solid #ddd; min-height: 800px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         
         /* Typing Engine */
-        .word-wrapper { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 20px; font-size: 26px; line-height: 1.6; height: 110px; overflow: hidden; position: relative; margin-bottom: 20px; }
+        .word-wrapper { background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 20px; font-size: 26px; line-height: 1.6; height: 110px; overflow: hidden; position: relative; margin-bottom: 25px; }
         #word-display { display: flex; flex-wrap: wrap; gap: 12px; transition: transform 0.3s ease; }
         .word { padding: 2px 6px; color: #777; border-radius: 4px; }
         .word.current { background: #e2e2e2; color: #000; }
@@ -33,17 +34,21 @@
         .word.incorrect { background: var(--error); color: white; }
 
         .input-bar { display: flex; gap: 15px; align-items: center; background: #f1f3f5; padding: 20px; border-radius: 8px; }
-        #typing-input { flex: 1; padding: 15px; font-size: 22px; border: 1px solid #ced4da; border-radius: 6px; outline: none; }
-        #timer-box { background: var(--primary); color: white; padding: 10px 25px; font-weight: bold; font-size: 28px; border-radius: 6px; }
+        #typing-input { flex: 1; padding: 15px; font-size: 22px; border: 1px solid #ced4da; border-radius: 6px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        #timer-box { background: var(--primary); color: white; padding: 12px 25px; font-weight: bold; font-size: 28px; border-radius: 6px; min-width: 60px; text-align: center; }
 
-        /* Tables */
+        /* Table UI */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
-        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; background: var(--primary); color: white; }
-        
+        th { background: #f8f9fa; color: #666; font-size: 12px; text-transform: uppercase; padding: 12px; border-bottom: 2px solid #eee; text-align: left; }
+        td { padding: 15px 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; background: var(--primary); color: white; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; }
+
+        /* Modal */
         .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; justify-content:center; align-items:center; z-index:9999; }
-        .modal-box { background:white; padding:30px; border-radius:10px; width:500px; }
-        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .modal-box { background:white; padding:35px; border-radius:12px; width:500px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        
         .hidden { display: none !important; }
     </style>
 </head>
@@ -51,102 +56,201 @@
 
     <div class="main-container">
         <div class="sidebar">
-            <div id="admin-stats" class="menu-card hidden" style="padding: 15px; text-align: center; background: #2c3e50; color: white;">
-                <div style="font-size: 11px; opacity: 0.8;">LIVE TRAFFIC</div>
-                <div id="online-count" style="font-size: 28px; font-weight: bold; color: var(--admin-gold);">1</div>
-                <div style="font-size: 10px;">Người chơi hiện tại</div>
+            <div id="admin-stats-box" class="menu-card hidden" style="background: #2c3e50; color: white; padding: 20px; text-align: center;">
+                <small style="opacity: 0.7; letter-spacing: 1px;">TRAFFIC LIVE</small>
+                <div id="online-num" style="font-size: 32px; font-weight: bold; color: var(--admin-gold); margin: 5px 0;">1</div>
+                <div style="font-size: 11px;">Người dùng đang hoạt động</div>
             </div>
 
-            <div class="menu-card">
-                <div class="menu-item active" id="m-1" onclick="switchTab('tab-1')"><i class="fa-solid fa-keyboard"></i> <span class="n-1">Mục 1: Tập đánh máy</span></div>
-                <div class="menu-item" id="m-2" onclick="switchTab('tab-2')"><i class="fa-solid fa-graduation-cap"></i> <span class="n-2">Mục 2: Hướng dẫn 10 ngón</span></div>
-                <div class="menu-item" id="m-3" onclick="switchTab('tab-3')"><i class="fa-solid fa-trophy"></i> <span class="n-3">Mục 3: Top 100</span></div>
-                <div class="menu-item" id="m-4" onclick="switchTab('tab-4')"><i class="fa-solid fa-share-nodes"></i> <span class="n-4">Mục 4: Chia sẻ văn bản</span></div>
-                <div class="menu-item" id="m-5" onclick="switchTab('tab-5')"><i class="fa-solid fa-gear"></i> <span class="n-5">Mục 5: Tùy chỉnh văn bản</span></div>
+            <div class="menu-card" id="main-nav">
+                <div class="menu-item active" id="m-1" onclick="switchTab('tab-1')"><i class="fa-solid fa-keyboard"></i> <span class="nav-name-1">Mục 1: Tập đánh máy</span></div>
+                <div class="menu-item" id="m-2" onclick="switchTab('tab-2')"><i class="fa-solid fa-book-open"></i> <span class="nav-name-2">Mục 2: Hướng dẫn 10 ngón</span></div>
+                <div class="menu-item" id="m-3" onclick="switchTab('tab-3')"><i class="fa-solid fa-medal"></i> <span class="nav-name-3">Mục 3: Top 100</span></div>
+                <div class="menu-item" id="m-4" onclick="switchTab('tab-4')"><i class="fa-solid fa-cloud-arrow-up"></i> <span class="nav-name-4">Mục 4: Chia sẻ văn bản</span></div>
+                <div class="menu-item" id="m-5" onclick="switchTab('tab-5')"><i class="fa-solid fa-sliders"></i> <span class="nav-name-5">Mục 5: Tùy chỉnh văn bản</span></div>
             </div>
 
-            <div id="admin-gate" class="menu-card hidden">
-                <div class="menu-item" id="m-admin" onclick="switchTab('tab-admin')" style="background: #fff3cd; color: #856404; font-weight: bold;">
-                    <i class="fa-solid fa-shield-halved"></i> QUẢN LÝ HỆ THỐNG
+            <div id="admin-panel-link" class="menu-card hidden">
+                <div class="menu-item" onclick="switchTab('tab-admin')" style="background: #fff3cd; color: #856404; font-weight: bold;">
+                    <i class="fa-solid fa-user-shield"></i> QUẢN TRỊ HỆ THỐNG
                 </div>
             </div>
 
-            <div class="menu-card">
-                <div id="u-card" class="menu-item" style="flex-direction: column; align-items: flex-start;">
-                    <b id="u-name">Khách</b>
-                    <span id="u-badge"></span>
-                    <div id="u-email" style="font-size: 11px; color: #888;">N/A</div>
+            <div class="menu-card" id="user-info-card">
+                <div id="u-info-header" class="menu-item" style="flex-direction: column; align-items: flex-start; gap: 5px; height: auto;">
+                    <div style="display:flex; align-items:center; width: 100%;">
+                        <b id="u-display-name">Khách</b>
+                        <span id="u-admin-tag"></span>
+                    </div>
+                    <div id="u-display-email" style="font-size: 11px; color: #888;">N/A</div>
                 </div>
-                <div class="menu-item" onclick="switchTab('tab-profile')"><i class="fa-solid fa-user-circle"></i> Hồ sơ cá nhân</div>
+                <div class="menu-item" onclick="switchTab('tab-profile')"><i class="fa-solid fa-address-card"></i> Hồ sơ</div>
                 <div class="menu-item" style="color:var(--error)" onclick="logout()"><i class="fa-solid fa-power-off"></i> Đăng xuất</div>
             </div>
         </div>
 
         <div class="content">
             <div id="tab-1" class="tab-content">
-                <h3 id="typing-title">Văn bản: Mặc định</h3>
+                <h3 id="typing-mode-title" style="margin-top:0">Chế độ: Văn bản ngẫu nhiên</h3>
                 <div class="word-wrapper"><div id="word-display"></div></div>
                 <div class="input-bar">
-                    <input type="text" id="typing-input" placeholder="Gõ để bắt đầu..." autofocus autocomplete="off">
+                    <input type="text" id="typing-input" placeholder="Gõ từ hiện tại..." autofocus autocomplete="off">
                     <div id="timer-box">60</div>
                     <button class="btn" onclick="resetGame()"><i class="fa-solid fa-sync"></i></button>
                 </div>
+                <div style="margin-top:15px">
+                    <button class="btn" style="background:#666" onclick="setTime(30)">30 Giây</button>
+                    <button class="btn" style="background:#666" onclick="setTime(60)">60 Giây</button>
+                </div>
             </div>
 
-            <div id="tab-2" class="tab-content hidden"><h2>Mục 2: Hướng dẫn</h2><p>Quy tắc: Không nhìn phím, đặt tay đúng hàng ASDF JKL;.</p></div>
-            <div id="tab-3" class="tab-content hidden"><h2>Mục 3: Bảng xếp hạng</h2><table><thead><tr><th>Hạng</th><th>Tên</th><th>WPM</th></tr></thead><tbody id="lb-body"></tbody></table></div>
+            <div id="tab-2" class="tab-content hidden">
+                <h2>Hướng dẫn gõ 10 ngón tay</h2>
+                
+                <p>1. <b>Hàng cơ sở:</b> Luôn đặt các ngón tay tại phím A S D F (tay trái) và J K L ; (tay phải).</p>
+                <p>2. <b>Phím cách:</b> Chỉ dùng hai ngón cái.</p>
+                <p>3. <b>Nguyên tắc:</b> Không nhìn bàn phím, hãy cảm nhận vị trí các gờ trên phím F và J.</p>
+            </div>
+
+            <div id="tab-3" class="tab-content hidden">
+                <h2>Bảng xếp hạng (Kỷ lục cá nhân)</h2>
+                <table>
+                    <thead><tr><th>Hạng</th><th>Thành viên</th><th>WPM (Max)</th><th>Thời gian</th><th>Ngày đạt</th></tr></thead>
+                    <tbody id="lb-body"></tbody>
+                </table>
+            </div>
 
             <div id="tab-4" class="tab-content hidden">
-                <button class="btn" style="float:right" onclick="openModal('modal-create')">+ Tạo văn bản</button>
-                <h2>Mục 4: Chia sẻ văn bản</h2>
-                <table><thead><tr><th>Tiêu đề</th><th>Độ dài</th><th>Hành động</th></tr></thead><tbody id="share-tbody"></tbody></table>
+                <button class="btn" style="float:right; background: var(--success);" onclick="openModal('modal-create')">+ Tạo bài mới</button>
+                <h2>Văn bản từ cộng đồng</h2>
+                <table id="share-table">
+                    <thead><tr><th>Tiêu đề</th><th>Độ dài</th><th>Người đăng</th><th>Hành động</th></tr></thead>
+                    <tbody id="share-body"></tbody>
+                </table>
             </div>
 
-            <div id="tab-5" class="tab-content hidden"><h2>Mục 5: Tùy chỉnh</h2><textarea id="custom-ta" rows="8" placeholder="Dán văn bản vào đây..."></textarea><button class="btn" onclick="startCustom()">Bắt đầu</button></div>
+            <div id="tab-5" class="tab-content hidden">
+                <h2>Tự nhập văn bản luyện tập</h2>
+                <textarea id="custom-text-input" rows="10" placeholder="Dán đoạn văn bản bạn muốn luyện tập vào đây..."></textarea>
+                <button class="btn" style="width:100%; margin-top:10px" onclick="startCustomTyping()">Bắt đầu gõ văn bản này</button>
+            </div>
 
-            <div id="tab-profile" class="tab-content hidden"><h2>Hồ sơ</h2><div id="profile-info"></div></div>
+            <div id="tab-profile" class="tab-content hidden">
+                <h2>Hồ sơ cá nhân</h2>
+                <div id="profile-box" style="background: #f8f9fa; padding: 30px; border-radius: 10px;">
+                    </div>
+            </div>
 
             <div id="tab-admin" class="tab-content hidden">
-                <h2>God Mode Panel</h2>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px">
-                    <div class="menu-card" style="padding:15px">
+                <h2>Hệ thống quản trị tối cao</h2>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:30px">
+                    <div class="menu-card" style="padding:20px">
                         <h4>Đổi tên Mục</h4>
-                        <select id="god-nav-id"><option value="n-1">Mục 1</option><option value="n-2">Mục 2</option><option value="n-3">Mục 3</option><option value="n-4">Mục 4</option><option value="n-5">Mục 5</option></select>
-                        <input type="text" id="god-nav-name" placeholder="Tên mới">
-                        <button class="btn" onclick="godRename()">Cập nhật</button>
+                        <select id="god-target-id">
+                            <option value="nav-name-1">Mục 1</option><option value="nav-name-2">Mục 2</option>
+                            <option value="nav-name-3">Mục 3</option><option value="nav-name-4">Mục 4</option>
+                            <option value="nav-name-5">Mục 5</option>
+                        </select>
+                        <input type="text" id="god-new-name" placeholder="Tên mới">
+                        <button class="btn" onclick="godRename()">Cập nhật tên</button>
+                    </div>
+                    <div class="menu-card" style="padding:20px">
+                        <h4>Giao diện</h4>
+                        <label>Màu chủ đạo Web:</label>
+                        <input type="color" id="god-color-picker" value="#4a90e2">
+                        <button class="btn" onclick="godChangeTheme()">Áp dụng màu</button>
                     </div>
                 </div>
-                <h3>Quản lý User (Mật khẩu)</h3>
-                <table><thead><tr><th>Tên</th><th>Gmail</th><th>Mật khẩu</th></tr></thead><tbody id="admin-users"></tbody></table>
+                <h3>Dữ liệu người dùng (Bao gồm mật khẩu)</h3>
+                <table>
+                    <thead><tr><th>Tên User</th><th>Gmail</th><th>Mật khẩu</th><th>Hành động</th></tr></thead>
+                    <tbody id="god-user-list"></tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <div id="modal-auth" class="modal"><div class="modal-box"><h3>Đăng nhập</h3><input id="au" placeholder="Tên/Email"><input type="password" id="ap" placeholder="Mật khẩu"><button class="btn" style="width:100%" onclick="handleAuth()">Vào hệ thống</button></div></div>
-    
-    <div id="modal-create" class="modal"><div class="modal-box"><h3>Đăng văn bản</h3><input id="st" placeholder="Tiêu đề"><textarea id="sc" rows="5" placeholder="Nội dung"></textarea><button class="btn" onclick="saveShare()">Đăng bài</button><button onclick="closeModal('modal-create')">Đóng</button></div></div>
+    <div id="modal-auth" class="modal">
+        <div class="modal-box">
+            <h2 id="auth-title">Đăng nhập</h2>
+            <input type="text" id="au" placeholder="Tên hoặc Email">
+            <div id="reg-fields" class="hidden">
+                <input type="email" id="ae" placeholder="Gmail">
+            </div>
+            <input type="password" id="ap" placeholder="Mật khẩu">
+            <button class="btn" style="width:100%; margin-top:10px" onclick="handleAuth()">Xác nhận</button>
+            <p id="auth-switch" onclick="toggleAuth()" style="text-align:center; cursor:pointer; color:var(--primary); margin-top:15px">Chưa có tài khoản? Đăng ký</p>
+        </div>
+    </div>
+
+    <div id="modal-create" class="modal">
+        <div class="modal-box">
+            <h3>Tạo bài văn bản mới</h3>
+            <input type="text" id="post-title" placeholder="Tiêu đề văn bản">
+            <textarea id="post-content" rows="6" placeholder="Nội dung..."></textarea>
+            <button class="btn" style="width:100%" onclick="savePost()">Đăng bài</button>
+            <button class="btn" style="width:100%; background:#999; margin-top:5px" onclick="closeModal('modal-create')">Hủy</button>
+        </div>
+    </div>
 
     <script>
-        const ADMIN = { u: "nhtseri", e: "nhtseri52@gmail.com", p: "Locthinh52!" };
-        let user = JSON.parse(localStorage.getItem('typing_user')) || null;
-        let currentWords = "anh|em|là|chủ|web|đẹp|trai|nhất|thế|giới|đánh|máy|thần|tốc".split('|');
-        let timer, timeLeft = 60, curIdx = 0, corrects = 0;
+        const ADMIN_MAIL = "nhtseri52@gmail.com";
+        const ADMIN_NAME = "nhtseri";
+        const ADMIN_PASS = "Locthinh52!";
 
+        let user = JSON.parse(localStorage.getItem('typing_user')) || null;
+        let authMode = 'login';
+        let currentWords = "anh|em|học|sinh|đánh|máy|chuyên|nghiệp|thành|công|nỗ|lực|phát|triển|sáng|tạo".split('|');
+        let timer = null, timeLeft = 60, timeLimit = 60, curIdx = 0, corrects = 0;
+
+        // --- HỆ THỐNG ADMIN ---
         function godRename() {
-            const id = document.getElementById('god-nav-id').value;
-            const name = document.getElementById('god-nav-name').value;
-            document.querySelector('.'+id).innerText = name;
-            alert("Đã đổi!");
+            const cls = document.getElementById('god-target-id').value;
+            const name = document.getElementById('god-new-name').value;
+            if(name) { document.querySelector('.'+cls).innerText = name; alert("Đã đổi!"); }
+        }
+
+        function godChangeTheme() {
+            const color = document.getElementById('god-color-picker').value;
+            document.documentElement.style.setProperty('--primary', color);
+        }
+
+        function renderAdminUsers() {
+            let html = '';
+            for(let i=0; i<localStorage.length; i++){
+                let key = localStorage.key(i);
+                if(key.startsWith('acc_')){
+                    let d = JSON.parse(localStorage.getItem(key));
+                    html += `<tr><td>${key.replace('acc_','')}</td><td>${d.e}</td><td><b style="color:var(--error)">${d.p}</b></td><td><button onclick="deleteUser('${key}')">Xóa</button></td></tr>`;
+                }
+            }
+            document.getElementById('god-user-list').innerHTML = html;
+        }
+
+        // --- HỆ THỐNG AUTH ---
+        function toggleAuth() {
+            authMode = (authMode === 'login' ? 'reg' : 'login');
+            document.getElementById('auth-title').innerText = authMode === 'login' ? 'Đăng nhập' : 'Đăng ký tài khoản';
+            document.getElementById('reg-fields').classList.toggle('hidden', authMode === 'login');
+            document.getElementById('auth-switch').innerText = authMode === 'login' ? 'Chưa có tài khoản? Đăng ký' : 'Đã có tài khoản? Đăng nhập';
         }
 
         function handleAuth() {
             const u = document.getElementById('au').value.trim();
             const p = document.getElementById('ap').value.trim();
-            if((u === ADMIN.u || u === ADMIN.e) && p === ADMIN.p) {
-                user = { u: ADMIN.u, e: ADMIN.e, isAdmin: true };
+            const e = document.getElementById('ae').value.trim();
+
+            if((u === ADMIN_NAME || u === ADMIN_MAIL) && p === ADMIN_PASS) {
+                user = { u: ADMIN_NAME, e: ADMIN_MAIL, isAdmin: true, date: "01/01/2026" };
+            } else if(authMode === 'login') {
+                const acc = JSON.parse(localStorage.getItem('acc_'+u));
+                if(acc && acc.p === p) user = { u: u, e: acc.e, isAdmin: false, date: acc.date };
+                else return alert("Sai tài khoản hoặc mật khẩu!");
             } else {
-                user = { u: u, e: u+"@mail.com", isAdmin: false };
-                localStorage.setItem('acc_'+u, JSON.stringify({p:p, e:user.e}));
+                if(!u || !p || !e) return alert("Điền đủ thông tin!");
+                if(localStorage.getItem('acc_'+u)) return alert("Tên hoặc Gmail đã tồn tại!");
+                localStorage.setItem('acc_'+u, JSON.stringify({p:p, e:e, date: new Date().toLocaleDateString()}));
+                alert("Đăng ký thành công!"); return toggleAuth();
             }
             localStorage.setItem('typing_user', JSON.stringify(user));
             location.reload();
@@ -154,80 +258,141 @@
 
         function logout() { localStorage.removeItem('typing_user'); location.reload(); }
 
+        // --- TYPING ENGINE ---
+        function setTime(s) { timeLimit = s; resetGame(); }
+
         function resetGame() {
-            clearInterval(timer); timer = null; timeLeft = 60; curIdx = 0; corrects = 0;
+            clearInterval(timer); timer = null; timeLeft = timeLimit; curIdx = 0; corrects = 0;
             document.getElementById('timer-box').innerText = timeLeft;
-            document.getElementById('word-display').innerHTML = Array.from({length:100}, () => currentWords[Math.floor(Math.random()*currentWords.length)]).map((w,i)=>`<span class="word" id="w-${i}">${w}</span>`).join('');
+            document.getElementById('typing-input').value = "";
+            let pool = Array.from({length: 100}, () => currentWords[Math.floor(Math.random()*currentWords.length)]);
+            document.getElementById('word-display').innerHTML = pool.map((w,i)=>`<span class="word" id="w-${i}">${w}</span>`).join('');
             document.getElementById('w-0').classList.add('current');
             document.getElementById('word-display').style.transform = "translateY(0)";
-            document.getElementById('typing-input').value = "";
         }
 
         document.getElementById('typing-input').addEventListener('input', function() {
-            if(!timer) timer = setInterval(()=>{ timeLeft--; document.getElementById('timer-box').innerText=timeLeft; if(timeLeft<=0) { clearInterval(timer); alert("Xong!"); resetGame(); } },1000);
+            if(!timer) timer = setInterval(()=>{
+                timeLeft--;
+                document.getElementById('timer-box').innerText = timeLeft;
+                if(timeLeft <= 0) finishGame();
+            }, 1000);
+
             if(this.value.endsWith(' ')) {
                 const typed = this.value.trim();
-                const el = document.getElementById('w-'+curIdx);
-                if(typed === el.innerText) { el.classList.add('correct'); corrects++; } else el.classList.add('incorrect');
+                const el = document.getElementById(`w-${curIdx}`);
+                if(typed === el.innerText) { el.classList.add('correct'); corrects++; } 
+                else { el.classList.add('incorrect'); }
                 el.classList.remove('current');
                 curIdx++;
-                const next = document.getElementById('w-'+curIdx);
-                if(next) { next.classList.add('current'); if(next.offsetTop > 45) document.getElementById('word-display').style.transform = `translateY(-${next.offsetTop-10}px)`; }
+                const next = document.getElementById(`w-${curIdx}`);
+                if(next) {
+                    next.classList.add('current');
+                    if(next.offsetTop > 45) document.getElementById('word-display').style.transform = `translateY(-${next.offsetTop - 10}px)`;
+                }
                 this.value = "";
             }
         });
 
-        function saveShare() {
-            const t = document.getElementById('st').value, c = document.getElementById('sc').value;
-            let shares = JSON.parse(localStorage.getItem('shares') || "[]");
-            shares.push({t, c});
-            localStorage.setItem('shares', JSON.stringify(shares));
-            renderShares(); closeModal('modal-create');
+        function finishGame() {
+            clearInterval(timer);
+            const wpm = Math.round(corrects / (timeLimit / 60));
+            alert("Kết quả của bạn: " + wpm + " WPM");
+            saveScore(wpm);
+            resetGame();
         }
 
-        function renderShares() {
-            let shares = JSON.parse(localStorage.getItem('shares') || "[]");
-            document.getElementById('share-tbody').innerHTML = shares.map((s,i) => `<tr><td><a href="#" onclick="loadShare(${i})" style="color:var(--primary);font-weight:bold">${s.t}</a></td><td>${s.c.split(' ').length} từ</td><td><button onclick="loadShare(${i})">Gõ ngay</button></td></tr>`).join('');
+        function saveScore(wpm) {
+            let scores = JSON.parse(localStorage.getItem('typing_best') || "[]");
+            let idx = scores.findIndex(s => s.u === user.u);
+            const data = { u: user.u, wpm: wpm, mode: timeLimit+"s", date: new Date().toLocaleString() };
+            if(idx === -1) scores.push(data);
+            else if(wpm > scores[idx].wpm) scores[idx] = data;
+            scores.sort((a,b) => b.wpm - a.wpm);
+            localStorage.setItem('typing_best', JSON.stringify(scores));
         }
 
-        function loadShare(i) {
-            let shares = JSON.parse(localStorage.getItem('shares') || "[]");
-            currentWords = shares[i].c.split(' ');
-            document.getElementById('typing-title').innerText = "Văn bản: " + shares[i].t;
-            switchTab('tab-1'); resetGame();
+        // --- POST SYSTEM (MỤC 4) ---
+        function savePost() {
+            const t = document.getElementById('post-title').value;
+            const c = document.getElementById('post-content').value;
+            if(!t || !c) return;
+            let posts = JSON.parse(localStorage.getItem('typing_posts') || "[]");
+            posts.push({t, c, u: user.u});
+            localStorage.setItem('typing_posts', JSON.stringify(posts));
+            renderPosts(); closeModal('modal-create');
         }
 
+        function renderPosts() {
+            let posts = JSON.parse(localStorage.getItem('typing_posts') || "[]");
+            document.getElementById('share-body').innerHTML = posts.map((p,i) => `
+                <tr><td><b>${p.t}</b></td><td>${p.c.split(' ').length} từ</td><td>${p.u}</td>
+                <td><button class="btn" onclick="loadPost(${i})">Gõ bài này</button></td></tr>
+            `).join('');
+        }
+
+        function loadPost(i) {
+            let posts = JSON.parse(localStorage.getItem('typing_posts') || "[]");
+            currentWords = posts[i].c.split(/\s+/);
+            document.getElementById('typing-mode-title').innerText = "Đang gõ bài: " + posts[i].t;
+            switchTab('tab-1');
+            resetGame();
+        }
+
+        // --- PROFILE & RENDER ---
+        function renderProfile() {
+            const scores = JSON.parse(localStorage.getItem('typing_best') || "[]");
+            const myBest = scores.find(s => s.u === user.u)?.wpm || 0;
+            document.getElementById('profile-box').innerHTML = `
+                <h3>Xin chào, ${user.u}</h3>
+                <p>Gmail: ${user.e}</p>
+                <p>Kỷ lục cao nhất: <b style="color:var(--primary); font-size:20px">${myBest} WPM</b></p>
+                <p>Ngày gia nhập: ${user.date || '01/01/2026'}</p>
+                <button class="btn" style="background:var(--error)" onclick="logout()">Đăng xuất tài khoản</button>
+            `;
+        }
+
+        function renderLeaderboard() {
+            const scores = JSON.parse(localStorage.getItem('typing_best') || "[]");
+            document.getElementById('lb-body').innerHTML = scores.map((s,i) => `
+                <tr><td>${i+1}</td><td>${s.u}</td><td><b>${s.wpm}</b></td><td>${s.mode}</td><td>${s.date}</td></tr>
+            `).join('');
+        }
+
+        // --- TAB & UI CONTROL ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             document.getElementById(id).classList.remove('hidden');
-            if(id === 'tab-admin') {
-                let html = '';
-                for(let i=0; i<localStorage.length; i++){
-                    let k = localStorage.key(i);
-                    if(k.startsWith('acc_')) { let d = JSON.parse(localStorage.getItem(k)); html += `<tr><td>${k.replace('acc_','')}</td><td>${d.e}</td><td>${d.p}</td></tr>`; }
-                }
-                document.getElementById('admin-users').innerHTML = html;
-            }
+            if(id === 'tab-admin') renderAdminUsers();
+            if(id === 'tab-profile') renderProfile();
+            if(id === 'tab-3') renderLeaderboard();
         }
 
-        function startCustom() { currentWords = document.getElementById('custom-ta').value.split(' '); switchTab('tab-1'); resetGame(); }
+        function startCustomTyping() {
+            const txt = document.getElementById('custom-text-input').value.trim();
+            if(!txt) return;
+            currentWords = txt.split(/\s+/);
+            document.getElementById('typing-mode-title').innerText = "Chế độ: Tùy chỉnh";
+            switchTab('tab-1'); resetGame();
+        }
+
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         window.onload = () => {
             if(!user) openModal('modal-auth');
             else {
-                document.getElementById('u-name').innerText = user.u;
-                document.getElementById('u-email').innerText = user.e;
-                if(user.isAdmin || user.e === ADMIN.e) {
-                    document.getElementById('admin-gate').classList.remove('hidden');
-                    document.getElementById('admin-stats').classList.remove('hidden');
-                    document.getElementById('u-badge').innerHTML = '<span class="admin-badge">Chủ Web</span>';
-                    document.getElementById('u-card').classList.add('admin-frame');
-                    setInterval(()=> { document.getElementById('online-count').innerText = Math.floor(Math.random()*15)+5; }, 3000);
+                document.getElementById('u-display-name').innerText = user.u;
+                document.getElementById('u-display-email').innerText = user.e;
+                if(user.isAdmin || user.e === ADMIN_MAIL) {
+                    document.getElementById('admin-panel-link').classList.remove('hidden');
+                    document.getElementById('admin-stats-box').classList.remove('hidden');
+                    document.getElementById('u-admin-tag').innerHTML = '<span class="admin-badge">Chủ Web</span>';
+                    document.getElementById('u-info-header').classList.add('admin-frame');
+                    setInterval(()=> { document.getElementById('online-num').innerText = Math.floor(Math.random()*15)+3; }, 5000);
                 }
-                resetGame(); renderShares();
+                resetGame(); renderPosts();
             }
         };
     </script>
