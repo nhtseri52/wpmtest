@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hệ Thống Đánh Máy Chuyên Nghiệp</title>
+    <title>Hệ Thống Đánh Máy Chuyên Nghiệp v3.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #2980b9; --bg: #ecf0f1; --gold: #f1c40f; --dark: #2c3e50; --success: #27ae60; --danger: #e74c3c; }
@@ -17,10 +17,11 @@
         .nav-item.active { background: var(--primary); color: white; border: none; }
         .nav-item i { width: 25px; font-size: 16px; margin-right: 10px; }
 
-        /* Admin Highlight */
+        /* User Profile Style */
+        .profile-header { padding: 20px; text-align: center; background: #fff; position: relative; }
+        .avatar-circle { width: 80px; height: 80px; background: #34495e; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 10px; border: 4px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .admin-border { border: 3px solid var(--gold) !important; }
-        .admin-badge { background: var(--gold); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: auto; }
-        .admin-stats { background: var(--dark) !important; color: white; padding: 20px; text-align: center; }
+        .admin-badge { background: var(--gold); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-top: 5px; display: inline-block; }
 
         /* Main Content */
         .main-content { flex-grow: 1; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-y: auto; }
@@ -31,24 +32,21 @@
         .typing-wrapper { background: #adcce9; padding: 15px; border-radius: 8px; display: flex; gap: 10px; align-items: center; margin-top: 20px; }
         #input-box { flex-grow: 1; height: 50px; padding: 10px 15px; font-size: 22px; border: 1px solid #ccc; border-radius: 4px; outline: none; }
         .timer-box { background: #34495e; color: white; padding: 0 15px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 22px; border-radius: 4px; min-width: 80px; font-weight: bold; }
-        .reset-btn { background: #4a90e2; color: white; border: none; height: 50px; width: 60px; border-radius: 4px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .reset-btn:hover { background: #357abd; }
+        .reset-btn { background: #4a90e2; color: white; border: none; height: 50px; width: 60px; border-radius: 4px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; }
 
         /* Word Display */
-        .word-display { font-size: 26px; line-height: 1.8; margin-bottom: 25px; min-height: 100px; color: #999; border: 1px solid #eee; padding: 15px; border-radius: 8px; }
+        .word-display { font-size: 26px; line-height: 1.8; margin-bottom: 25px; min-height: 120px; color: #999; border: 1px solid #eee; padding: 15px; border-radius: 8px; }
         .word-active { background: #dcdde1; color: #000; border-radius: 4px; padding: 2px 6px; }
         .word-correct { color: var(--success); }
         .word-wrong { background: var(--danger); color: white; border-radius: 4px; padding: 2px 6px; }
 
-        /* Table (image_c59c3c.jpg) */
-        .table-container { margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; }
+        /* Community Table (image_c59c3c.jpg) */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { text-align: left; padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 13px; border-bottom: 2px solid #eee; }
         td { padding: 15px 12px; border-bottom: 1px solid #eee; font-size: 14px; vertical-align: middle; }
         .status-tag { background: var(--success); color: white; font-size: 11px; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
-        .post-title { color: #2980b9; font-weight: bold; text-decoration: none; font-size: 15px; }
+        .post-title { color: #2980b9; font-weight: bold; text-decoration: none; font-size: 15px; cursor: pointer; }
         .post-meta { font-size: 12px; color: #95a5a6; margin-top: 4px; }
-        .rank-icon { width: 20px; height: 20px; background: #ddd; border-radius: 50%; display: inline-block; }
 
         /* Login */
         #login-screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; justify-content: center; align-items: center; }
@@ -61,10 +59,10 @@
     <div id="login-screen">
         <div class="login-box">
             <h2 style="text-align:center">ĐĂNG NHẬP</h2>
-            <input type="text" id="u" placeholder="Tên đăng nhập">
+            <input type="text" id="u" placeholder="Tên người dùng">
             <input type="email" id="e" placeholder="Email (Admin: nhtseri52@gmail.com)">
             <input type="password" id="p" placeholder="Mật khẩu">
-            <button onclick="app.login()" style="width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; margin-top:10px">VÀO HỆ THỐNG</button>
+            <button onclick="app.login()" style="width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold">VÀO HỆ THỐNG</button>
         </div>
     </div>
 
@@ -76,62 +74,69 @@
             <div id="word-display" class="word-display"></div>
             <div class="typing-wrapper">
                 <input type="text" id="input-box" placeholder="Gõ tại đây..." autocomplete="off">
-                <div id="timer" class="timer-box">0:00</div>
+                <div id="timer" class="timer-box">0:60</div>
                 <button class="reset-btn" onclick="app.resetTyping()"><i class="fa-solid fa-rotate-right"></i></button>
             </div>
         </div>
 
         <div id="page-2" class="page">
             <h2>Mục 2: Hướng dẫn 10 ngón</h2>
-            <div style="line-height:2">
-                <p>• Ngón trỏ tay trái đặt tại phím <b>F</b>, ngón trỏ tay phải đặt tại phím <b>J</b>.</p>
-                <p>• Các ngón còn lại đặt trên hàng phím cơ sở.</p>
-            </div>
+            
+            <p>Sử dụng 10 ngón tay để tối ưu tốc độ gõ phím của bạn.</p>
         </div>
 
         <div id="page-3" class="page">
-            <h2>Mục 3: Top 100 Cao Thủ</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Hạng</th>
-                            <th>Người chơi</th>
-                            <th>Tốc độ (WPM)</th>
-                            <th>Độ chính xác</th>
-                            <th>Thời gian đạt</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rank-data"></tbody>
-                </table>
-            </div>
+            <h2>Mục 3: Xếp hạng Top 100</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hạng</th>
+                        <th>Người chơi</th>
+                        <th>Tốc độ (WPM)</th>
+                        <th>Độ chính xác</th>
+                        <th>Thời gian đạt</th>
+                    </tr>
+                </thead>
+                <tbody id="rank-data"></tbody>
+            </table>
         </div>
 
         <div id="page-4" class="page">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
                 <h2>Mục 4: Chia sẻ văn bản</h2>
-                <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold"><i class="fa-solid fa-plus"></i> Tạo văn bản</button>
+                <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold">+ Tạo văn bản</button>
             </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th width="100">Trạng thái</th>
-                            <th>Tiêu đề</th>
-                            <th width="80">Xếp hạng</th>
-                            <th width="100">Độ dài văn bản</th>
-                            <th width="120">Cách đây</th>
-                        </tr>
-                    </thead>
-                    <tbody id="community-data"></tbody>
-                </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="100">Trạng thái</th>
+                        <th>Tiêu đề</th>
+                        <th width="100">Xếp hạng</th>
+                        <th width="100">Độ dài</th>
+                        <th width="120">Cách đây</th>
+                    </tr>
+                </thead>
+                <tbody id="community-data"></tbody>
+            </table>
+        </div>
+
+        <div id="page-profile" class="page">
+            <h2>Hồ sơ của tôi</h2>
+            <div style="display: flex; gap: 30px; align-items: flex-start; margin-top: 20px;">
+                <div class="avatar-circle" style="width: 150px; height: 150px; font-size: 60px;">U</div>
+                <div style="flex-grow: 1;">
+                    <p><b>Tên người dùng:</b> <span id="prof-u"></span></p>
+                    <p><b>Email:</b> <span id="prof-e"></span></p>
+                    <p><b>Kỷ lục cao nhất:</b> <span id="prof-best">0</span> WPM</p>
+                    <p><b>Thành tích:</b> <span class="status-tag">Thành viên mới</span></p>
+                </div>
             </div>
         </div>
 
         <div id="page-admin" class="page">
-            <h2 style="color:var(--danger)">GOD MODE - QUẢN LÝ USER</h2>
+            <h2 style="color:var(--danger)">GOD MODE</h2>
             <table>
-                <thead><tr><th>Tên User</th><th>Email</th><th>Mật khẩu</th><th>Hành động</th></tr></thead>
+                <thead><tr><th>User</th><th>Email</th><th>Password</th><th>Hành động</th></tr></thead>
                 <tbody id="admin-list"></tbody>
             </table>
         </div>
@@ -139,7 +144,8 @@
 
     <script>
         const ADMIN_EMAIL = "nhtseri52@gmail.com";
-        const DICTIONARY = "tôi|đi|học|trường|lớp|đánh|máy|nhanh|chính|xác|thành|công|nỗ|lực|vươn|lên|tương|lai|sáng|tạo|phát|triển|công|nghệ|thông|tin".split('|');
+        // KHO TỪ RANDOM BẠN ĐÃ CUNG CẤP
+        const DICTIONARY = "chào|học|sinh|tôi|vận|động|viên|nhà|trường|học|chạy|trình|ai|anh|cười|em|ngày|bão|xã|hội|đất".split('|');
 
         const app = {
             user: null, words: [], curIdx: 0, timeLeft: 60, isPlaying: false, timer: null, ok: 0, fail: 0,
@@ -156,7 +162,7 @@
 
             login() {
                 const u = document.getElementById('u').value, e = document.getElementById('e').value, p = document.getElementById('p').value;
-                if(!u || !e || !p) return alert("Vui lòng nhập đủ thông tin!");
+                if(!u || !e || !p) return alert("Nhập đủ thông tin!");
                 this.user = { u, e, isAdmin: e === ADMIN_EMAIL };
                 localStorage.setItem('user', JSON.stringify(this.user));
                 localStorage.setItem(`acc_${u}`, JSON.stringify({e, p}));
@@ -167,16 +173,14 @@
                 const isAdmin = this.user.isAdmin;
                 let html = `
                     <div class="card ${isAdmin ? 'admin-border' : ''}">
-                        <div class="nav-item" style="flex-direction:column; align-items:flex-start">
-                            <div style="display:flex; width:100%; align-items:center">
-                                <b>${this.user.u}</b>
-                                ${isAdmin ? '<span class="admin-badge">CHỦ WEB</span>' : ''}
-                            </div>
-                            <small style="color:#888">${this.user.e}</small>
+                        <div class="profile-header">
+                            <div class="avatar-circle">${this.user.u[0].toUpperCase()}</div>
+                            <b>${this.user.u}</b><br>
+                            ${isAdmin ? '<span class="admin-badge">CHỦ WEB</span>' : ''}
                         </div>
+                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')"><i class="fa-solid fa-user-gear"></i> Hồ sơ của tôi</div>
                         <div class="nav-item" style="color:red" onclick="location.reload(); localStorage.removeItem('user')"><i class="fa-solid fa-power-off"></i> Đăng xuất</div>
                     </div>
-                    ${isAdmin ? '<div class="card admin-stats"><small>ONLINE USERS</small><div style="font-size:24px;color:var(--gold);font-weight:bold">15</div></div>' : ''}
                     <div class="card">
                         <div class="nav-item ${activeId==='page-1'?'active':''}" onclick="app.showPage(1)"><i class="fa-solid fa-keyboard"></i> Mục 1: Tập gõ</div>
                         <div class="nav-item ${activeId==='page-2'?'active':''}" onclick="app.showPage(2)"><i class="fa-solid fa-graduation-cap"></i> Mục 2: Hướng dẫn</div>
@@ -190,21 +194,27 @@
 
             showPage(id) {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.getElementById('page-'+id).classList.add('active');
-                this.renderSidebar('page-'+id);
+                if(id === 'profile') {
+                    document.getElementById('page-profile').classList.add('active');
+                    this.renderProfile();
+                } else {
+                    document.getElementById('page-'+id).classList.add('active');
+                }
+                this.renderSidebar(id === 'profile' ? 'page-profile' : 'page-'+id);
                 if(id === 3) this.renderRank();
                 if(id === 4) this.renderCommunity();
                 if(id === 'admin') this.renderAdmin();
             },
 
-            resetTyping(customText = null) {
+            resetTyping(custom = null) {
                 clearInterval(this.timer);
                 this.timeLeft = 60; this.curIdx = 0; this.isPlaying = false; this.ok = 0; this.fail = 0;
                 document.getElementById('timer').innerText = "0:60";
                 document.getElementById('input-box').value = "";
                 document.getElementById('input-box').disabled = false;
                 
-                this.words = customText ? customText.split(/\s+/) : Array.from({length:60}, () => DICTIONARY[Math.floor(Math.random()*DICTIONARY.length)]);
+                // RANDOM CHỮ TỪ KHO TỪ MỚI CỦA BẠN
+                this.words = custom ? custom.split(/\s+/) : Array.from({length:60}, () => DICTIONARY[Math.floor(Math.random()*DICTIONARY.length)]);
                 this.renderWords();
             },
 
@@ -231,19 +241,13 @@
                 rank.push({ u: this.user.u, w: wpm, a: acc, t: new Date().toLocaleString() });
                 rank.sort((a,b) => b.w - a.w);
                 localStorage.setItem('rank_list', JSON.stringify(rank.slice(0, 100)));
-                alert(`Hoàn thành! WPM: ${wpm} - Độ chính xác: ${acc}%`);
+                alert("Kết quả: " + wpm + " WPM");
             },
 
             renderRank() {
                 const data = JSON.parse(localStorage.getItem('rank_list') || "[]");
                 document.getElementById('rank-data').innerHTML = data.map((r, i) => `
-                    <tr>
-                        <td><b>#${i+1}</b></td>
-                        <td>${r.u}</td>
-                        <td style="color:var(--primary); font-weight:bold">${r.w}</td>
-                        <td>${r.a}%</td>
-                        <td style="color:#95a5a6; font-size:12px">${r.t}</td>
-                    </tr>
+                    <tr><td><b>#${i+1}</b></td><td>${r.u}</td><td>${r.w}</td><td>${r.a}%</td><td>${r.t}</td></tr>
                 `).join("");
             },
 
@@ -252,31 +256,30 @@
                 document.getElementById('community-data').innerHTML = posts.map(p => `
                     <tr>
                         <td><span class="status-tag">công khai</span></td>
-                        <td>
-                            <a href="#" class="post-title" onclick="app.playPost('${btoa(p.c)}')">${p.t}</a>
-                            <div class="post-meta">${p.c.substring(0, 50)}...</div>
-                        </td>
-                        <td><span class="rank-icon"></span><br><small style="font-size:10px">0 phiếu</small></td>
-                        <td>${p.c.split(' ').length} từ<br><small>${p.c.length} kí tự</small></td>
-                        <td>${p.date}</td>
+                        <td><a class="post-title" onclick="app.playPost('${btoa(p.c)}')">${p.t}</a><div class="post-meta">${p.c.substring(0,40)}...</div></td>
+                        <td>●●●</td><td>${p.c.split(' ').length} từ</td><td>Hôm nay</td>
                     </tr>
                 `).join("");
             },
 
             addPost() {
-                const t = prompt("Nhập tiêu đề văn bản:");
-                const c = prompt("Nhập nội dung văn bản:");
+                const t = prompt("Tiêu đề:"), c = prompt("Nội dung:");
                 if(t && c) {
                     let posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
-                    posts.push({ t, c, date: "Hôm nay", u: this.user.u });
+                    posts.push({t, c, u: this.user.u});
                     localStorage.setItem('posts_list', JSON.stringify(posts));
                     this.renderCommunity();
                 }
             },
 
-            playPost(encodedC) {
-                this.showPage(1);
-                this.resetTyping(atob(encodedC));
+            playPost(encoded) { this.showPage(1); this.resetTyping(atob(encoded)); },
+
+            renderProfile() {
+                document.getElementById('prof-u').innerText = this.user.u;
+                document.getElementById('prof-e').innerText = this.user.e;
+                const rank = JSON.parse(localStorage.getItem('rank_list') || "[]");
+                const myBest = rank.filter(r => r.u === this.user.u).sort((a,b) => b.w - a.w)[0];
+                document.getElementById('prof-best').innerText = myBest ? myBest.w : 0;
             },
 
             renderAdmin() {
@@ -285,8 +288,8 @@
                     let k = localStorage.key(i);
                     if(k.startsWith('acc_')){
                         let u = k.replace('acc_',''), d = JSON.parse(localStorage.getItem(k));
-                        h += `<tr><td><b>${u}</b></td><td>${d.e}</td><td><input id="p-${u}" value="${d.p}" style="padding:5px"></td>
-                        <td><button class="btn-edit" onclick="app.saveP('${u}','${d.e}')" style="background:var(--primary); color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer">Đổi Pass</button></td></tr>`;
+                        h += `<tr><td>${u}</td><td>${d.e}</td><td><input id="p-${u}" value="${d.p}"></td>
+                        <td><button onclick="app.saveP('${u}','${d.e}')">Lưu</button></td></tr>`;
                     }
                 }
                 document.getElementById('admin-list').innerHTML = h;
@@ -295,7 +298,7 @@
             saveP(u, e) {
                 const newP = document.getElementById('p-'+u).value;
                 localStorage.setItem('acc_'+u, JSON.stringify({e, p: newP}));
-                alert("Đã cập nhật mật khẩu cho " + u);
+                alert("Đã đổi pass!");
             }
         };
 
