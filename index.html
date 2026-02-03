@@ -1,400 +1,83 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Pro - God Mode nhtseri</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --primary: #2980b9; --bg: #ecf0f1; --dark: #2c3e50; --gold: #f1c40f; --success: #27ae60; --error: #e74c3c; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .main-container { display: flex; gap: 20px; max-width: 1500px; margin: auto; }
+const ADMIN_EMAIL = "nhtseri52@gmail.com";
 
-        /* Sidebar */
-        .sidebar { width: 320px; flex-shrink: 0; }
-        .card { background: white; border-radius: 10px; border: 1px solid #dcdde1; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .nav-item { padding: 15px; display: flex; align-items: center; cursor: pointer; border-bottom: 1px solid #f1f1f1; transition: 0.2s; color: #555; }
-        .nav-item:hover { background: #f9f9f9; }
-        .nav-item.active { background: var(--primary); color: white; }
-        .nav-item i { width: 30px; font-size: 18px; }
+function checkAuth() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user && !window.location.href.includes('login.html')) {
+        window.location.href = 'login.html';
+    }
+    return user;
+}
 
-        .admin-tag { background: var(--gold); color: black; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-left: auto; }
-        .admin-border { border: 2px solid var(--gold) !important; }
+function renderSidebar(activePage) {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const isAdmin = user.e === ADMIN_EMAIL;
 
-        /* Content */
-        .content { flex-grow: 1; background: white; padding: 30px; border-radius: 10px; min-height: 850px; }
-        
-        /* Engine */
-        .stats-row { display: flex; gap: 20px; margin-bottom: 20px; }
-        .stat-card { background: #f8f9fa; padding: 15px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid #eee; }
-        .stat-card span { display: block; font-size: 24px; font-weight: bold; color: var(--primary); }
-
-        .word-box { background: #fff; border: 2px solid #ddd; border-radius: 8px; padding: 25px; font-size: 28px; line-height: 1.8; height: 130px; overflow: hidden; position: relative; margin-bottom: 20px; }
-        #display { display: flex; flex-wrap: wrap; gap: 12px; transition: 0.2s; }
-        .word { padding: 0 5px; color: #999; border-radius: 4px; }
-        .word.active { background: #dcdde1; color: #000; }
-        .word.ok { color: var(--success); }
-        .word.fail { background: var(--error); color: white; }
-
-        #input-field { width: 100%; padding: 20px; font-size: 24px; border: 2px solid #ddd; border-radius: 8px; outline: none; transition: 0.3s; }
-        #input-field:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(41,128,185,0.2); }
-
-        /* Tables */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f4f6f7; color: #666; font-size: 13px; }
-        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; background: var(--primary); color: white; }
-        
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: white; padding: 40px; border-radius: 15px; width: 450px; text-align: center; }
-        .star-btn { font-size: 30px; cursor: pointer; color: #ccc; transition: 0.2s; }
-        .star-btn:hover, .star-btn.active { color: var(--gold); }
-    </style>
-</head>
-<body>
-
-    <div class="main-container">
-        <div class="sidebar">
-            <div id="admin-live" class="card hidden" style="background: var(--dark); color: white; padding: 20px; text-align: center;">
-                <small style="letter-spacing: 2px;">ONLINE USERS</small>
-                <div id="online-val" style="font-size: 35px; font-weight: bold; color: var(--gold);">1</div>
-            </div>
-
-            <div class="card">
-                <div class="nav-item active" onclick="setTab('tab1')"><i class="fa-solid fa-keyboard"></i> <span>Mục 1: Tập gõ</span></div>
-                <div class="nav-item" onclick="setTab('tab2')"><i class="fa-solid fa-graduation-cap"></i> <span>Mục 2: Hướng dẫn</span></div>
-                <div class="nav-item" onclick="setTab('tab3')"><i class="fa-solid fa-trophy"></i> <span>Mục 3: Xếp hạng</span></div>
-                <div class="nav-item" onclick="setTab('tab4')"><i class="fa-solid fa-users"></i> <span>Mục 4: Cộng đồng</span></div>
-                <div class="nav-item" onclick="setTab('tab5')"><i class="fa-solid fa-tools"></i> <span>Mục 5: Tùy chỉnh</span></div>
-            </div>
-
-            <div id="admin-gate" class="card hidden">
-                <div class="nav-item" onclick="setTab('tab-admin')" style="color: #d35400;"><i class="fa-solid fa-user-shield"></i> <b>GOD MODE</b></div>
-            </div>
-
-            <div class="card" id="user-profile-card">
-                <div class="nav-item" style="height:auto; flex-direction:column; align-items:flex-start;">
-                    <div style="display:flex; width:100%">
-                        <b id="u-name">Guest</b> <span id="u-tag"></span>
-                    </div>
-                    <small id="u-mail" style="color:#999"></small>
+    let html = `
+        <div class="card user-card ${isAdmin ? 'admin-border' : ''}">
+            <div class="nav-item" style="flex-direction:column; align-items:flex-start; height:auto">
+                <div style="display:flex; width:100%; align-items:center">
+                    <b>${user.u || 'Khách'}</b>
+                    ${isAdmin ? '<span class="admin-badge">CHỦ WEB</span>' : ''}
                 </div>
-                <div class="nav-item" style="color:var(--error)" onclick="logout()"><i class="fa-solid fa-power-off"></i> Thoát</div>
+                <small style="color:#888; font-size:11px">${user.e || ''}</small>
+            </div>
+            <div class="nav-item" style="color:#e74c3c; cursor:pointer" onclick="logout()">
+                <i class="fa-solid fa-power-off"></i> Đăng xuất
             </div>
         </div>
-
-        <div class="content">
-            <div id="tab1" class="tab-box">
-                <h2 id="mode-title">Luyện tập gõ phím</h2>
-                <div class="stats-row">
-                    <div class="stat-card">Thời gian <span id="stat-time">00:00</span></div>
-                    <div class="stat-card">WPM <span id="stat-wpm">0</span></div>
-                    <div class="stat-card">Độ chính xác <span id="stat-acc">0%</span></div>
-                </div>
-                <div class="word-box"><div id="display"></div></div>
-                <input type="text" id="input-field" placeholder="Bắt đầu gõ để tính giờ..." autofocus autocomplete="off">
-            </div>
-
-            <div id="tab2" class="tab-box hidden">
-                <h2>Kỹ thuật gõ 10 ngón</h2>
-                
-                <div style="margin-top:20px; line-height: 1.8;">
-                    <p><b>- Ngón trỏ trái:</b> Phím F. <b>Ngón trỏ phải:</b> Phím J (có gờ nổi).</p>
-                    <p><b>- Ngón cái:</b> Phím Space (Dùng luân phiên).</p>
-                    <p><b>- Nguyên tắc:</b> Không bao giờ nhìn bàn phím khi đang gõ.</p>
-                </div>
-            </div>
-
-            <div id="tab3" class="tab-box hidden">
-                <h2>Bảng xếp hạng toàn cầu</h2>
-                <table>
-                    <thead><tr><th>Hạng</th><th>Người chơi</th><th>Tốc độ (WPM)</th><th>Độ chính xác</th><th>Ngày</th></tr></thead>
-                    <tbody id="lb-data"></tbody>
-                </table>
-            </div>
-
-            <div id="tab4" class="tab-box hidden">
-                <div style="display:flex; justify-content:space-between">
-                    <h2>Cộng đồng</h2>
-                    <button class="btn" onclick="showModal('modal-add')">Đăng bài</button>
-                </div>
-                <input type="text" id="search-bar" placeholder="Tìm theo tiêu đề hoặc tác giả..." oninput="drawComm()" style="width:100%; padding:12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 6px;">
-                <table>
-                    <thead><tr><th>Đánh giá</th><th>Tiêu đề</th><th>Tác giả</th><th>Độ dài</th><th>Hành động</th></tr></thead>
-                    <tbody id="comm-data"></tbody>
-                </table>
-            </div>
-
-            <div id="tab5" class="tab-box hidden">
-                <h2>Văn bản cá nhân</h2>
-                <textarea id="custom-val" rows="10" style="width:100%; padding:15px;" placeholder="Dán nội dung bạn muốn luyện tập vào đây..."></textarea>
-                <button class="btn" style="width:100%; margin-top:10px" onclick="goCustom()">Bắt đầu luyện tập</button>
-            </div>
-
-            <div id="tab-admin" class="tab-box hidden">
-                <h2>Admin Control Panel</h2>
-                <table><thead><tr><th>Tên</th><th>Email</th><th>Mật khẩu</th></tr></thead><tbody id="admin-user-list"></tbody></table>
-            </div>
+        ${isAdmin ? `
+        <div class="card admin-stats">
+            <small>ONLINE USERS</small>
+            <div id="online-val">${Math.floor(Math.random()*15)+5}</div>
+        </div>` : ''}
+        <div class="card nav-menu">
+            <a href="index.html" class="nav-item ${activePage==='index.html'?'active':''}">
+                <i class="fa-solid fa-keyboard"></i> Mục 1: Tập gõ
+            </a>
+            <a href="guide.html" class="nav-item ${activePage==='guide.html'?'active':''}">
+                <i class="fa-solid fa-graduation-cap"></i> Mục 2: Hướng dẫn
+            </a>
+            <a href="rank.html" class="nav-item ${activePage==='rank.html'?'active':''}">
+                <i class="fa-solid fa-trophy"></i> Mục 3: Xếp hạng
+            </a>
+            <a href="community.html" class="nav-item ${activePage==='community.html'?'active':''}">
+                <i class="fa-solid fa-users"></i> Mục 4: Cộng đồng
+            </a>
+            <a href="custom.html" class="nav-item ${activePage==='custom.html'?'active':''}">
+                <i class="fa-solid fa-tools"></i> Mục 5: Tùy chỉnh
+            </a>
+            ${isAdmin ? `
+            <a href="admin.html" class="nav-item ${activePage==='admin.html'?'active':''}" style="background:#fff3cd; color:#856404">
+                <i class="fa-solid fa-user-shield"></i> GOD MODE
+            </a>` : ''}
         </div>
-    </div>
+    `;
+    document.getElementById('sidebar-inject').innerHTML = html;
+}
 
-    <div id="modal-auth" class="modal">
-        <div class="modal-content">
-            <h2>Welcome Back</h2>
-            <input type="text" id="log-u" placeholder="Tên / Email" style="width:100%; padding:12px; margin:10px 0">
-            <input type="password" id="log-p" placeholder="Mật khẩu" style="width:100%; padding:12px; margin:10px 0">
-            <button class="btn" style="width:100%" onclick="auth()">Đăng nhập</button>
-            <p style="font-size:12px; color:#999; margin-top:10px">Admin: nhtseri52@gmail.com / Locthinh52!</p>
-        </div>
-    </div>
+function logout() {
+    localStorage.removeItem('user');
+    window.location.href = 'login.html';
+}
 
-    <div id="modal-rate" class="modal">
-        <div class="modal-content">
-            <h3>Kết quả: <span id="res-wpm">0</span> WPM</h3>
-            <p>Độ chính xác: <span id="res-acc">0</span>%</p>
-            <hr>
-            <h4>Đánh giá bài viết này</h4>
-            <div id="stars">
-                <i class="fa-solid fa-star star-btn" data-v="1"></i>
-                <i class="fa-solid fa-star star-btn" data-v="2"></i>
-                <i class="fa-solid fa-star star-btn" data-v="3"></i>
-                <i class="fa-solid fa-star star-btn" data-v="4"></i>
-                <i class="fa-solid fa-star star-btn" data-v="5"></i>
-            </div>
-            <button class="btn" style="margin-top:20px" onclick="submitRate()">Hoàn tất</button>
-        </div>
-    </div>
-
-    <div id="modal-add" class="modal">
-        <div class="modal-content">
-            <h3>Chia sẻ bài tập</h3>
-            <input type="text" id="add-t" placeholder="Tiêu đề" style="width:100%; margin-bottom:10px">
-            <textarea id="add-c" rows="5" placeholder="Nội dung văn bản..." style="width:100%; margin-bottom:10px"></textarea>
-            <button class="btn" onclick="savePost()">Công khai</button>
-            <button class="btn" style="background:#999" onclick="hideModal('modal-add')">Hủy</button>
-        </div>
-    </div>
-
-    <script>
-        const ADMIN_INFO = { e: "nhtseri52@gmail.com", u: "nhtseri", p: "Locthinh52!" };
-        let user = JSON.parse(localStorage.getItem('user')) || null;
-        
-        // Data mặc định Mục 1
-        const DEFAULT_LIB = "trường|học|thành|công|nỗ|lực|đánh|máy|chuyên|nghiệp|sáng|tạo|phát|triển|kiến|thức|tương|lai|bền|vững|khát|vọng|chiến|thắng".split('|');
-        let words = [], isCounting = false, timer, seconds = 0;
-        let curIdx = 0, correctCount = 0, totalChars = 0, errors = 0;
-        let isCommunityMode = false, currentPostIndex = -1, ratingSelected = 0;
-
-        // AUTH
-        function auth() {
-            const u = document.getElementById('log-u').value, p = document.getElementById('log-p').value;
-            if((u === ADMIN_INFO.e || u === ADMIN_INFO.u) && p === ADMIN_INFO.p) {
-                user = { u: ADMIN_INFO.u, e: ADMIN_INFO.e, isAdmin: true };
-            } else {
-                user = { u: u, e: u+"@gmail.com", isAdmin: false };
-                localStorage.setItem('acc_'+u, JSON.stringify({p:p, e:user.e}));
-            }
-            localStorage.setItem('user', JSON.stringify(user));
-            location.reload();
-        }
-        function logout() { localStorage.removeItem('user'); location.reload(); }
-
-        // ENGINE
-        function initGame(lib) {
-            clearInterval(timer); isCounting = false; seconds = 0; curIdx = 0; correctCount = 0; errors = 0;
-            words = lib;
-            document.getElementById('stat-time').innerText = "00:00";
-            document.getElementById('stat-wpm').innerText = "0";
-            document.getElementById('stat-acc').innerText = "0%";
-            document.getElementById('display').innerHTML = words.map((w,i)=>`<span class="word" id="w-${i}">${w}</span>`).join('');
-            document.getElementById('w-0').classList.add('active');
-            document.getElementById('display').style.transform = "translateY(0)";
-            document.getElementById('input-field').value = "";
-        }
-
-        document.getElementById('input-field').addEventListener('input', function(e) {
-            if(!isCounting && this.value.length > 0) {
-                isCounting = true;
-                timer = setInterval(() => {
-                    seconds++;
-                    let m = Math.floor(seconds/60), s = seconds%60;
-                    document.getElementById('stat-time').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                    // Realtime WPM
-                    let wpm = Math.round((correctCount / (seconds / 60)) || 0);
-                    document.getElementById('stat-wpm').innerText = wpm;
-                }, 1000);
-            }
-
-            if(this.value.endsWith(' ')) {
-                const typed = this.value.trim();
-                const target = words[curIdx];
-                const el = document.getElementById(`w-${curIdx}`);
-
-                if(typed === target) {
-                    el.className = 'word ok';
-                    correctCount++;
-                } else {
-                    el.className = 'word fail';
-                    errors++;
-                }
-
-                curIdx++;
-                if(curIdx >= words.length) {
-                    finish();
-                } else {
-                    const next = document.getElementById(`w-${curIdx}`);
-                    next.className = 'word active';
-                    if(next.offsetTop > 50) document.getElementById('display').style.transform = `translateY(-${next.offsetTop - 10}px)`;
-                }
-                
-                // Cập nhật Accuracy
-                let acc = Math.round((correctCount / (correctCount + errors)) * 100);
-                document.getElementById('stat-acc').innerText = acc + "%";
-                this.value = "";
-            }
-        });
-
-        function finish() {
-            clearInterval(timer);
-            let wpm = document.getElementById('stat-wpm').innerText;
-            let acc = document.getElementById('stat-acc').innerText.replace('%','');
-            
-            document.getElementById('res-wpm').innerText = wpm;
-            document.getElementById('res-acc').innerText = acc;
-            
-            saveToLB(wpm, acc);
-            showModal('modal-rate');
-            if(!isCommunityMode) {
-                document.getElementById('stars').style.display = 'none';
-            } else {
-                document.getElementById('stars').style.display = 'block';
-            }
-        }
-
-        function saveToLB(wpm, acc) {
-            let lb = JSON.parse(localStorage.getItem('leaderboard') || "[]");
-            lb.push({ u: user.u, wpm: parseInt(wpm), acc: acc + "%", date: new Date().toLocaleDateString() });
-            lb.sort((a,b) => b.wpm - a.wpm);
-            localStorage.setItem('leaderboard', JSON.stringify(lb.slice(0, 100)));
-        }
-
-        // COMMUNITY
-        function drawComm() {
-            let posts = JSON.parse(localStorage.getItem('posts') || "[]");
-            let q = document.getElementById('search-bar').value.toLowerCase();
-            let filtered = posts.filter(p => p.t.toLowerCase().includes(q) || p.u.toLowerCase().includes(q));
-            
-            // Sắp xếp theo đánh giá trung bình
-            filtered.sort((a,b) => {
-                let rA = a.rates.length ? a.rates.reduce((x,y)=>x+y)/a.rates.length : 0;
-                let rB = b.rates.length ? b.rates.reduce((x,y)=>x+y)/b.rates.length : 0;
-                return rB - rA;
-            });
-
-            document.getElementById('comm-data').innerHTML = filtered.map((p,i) => {
-                let avg = p.rates.length ? (p.rates.reduce((x,y)=>x+y)/p.rates.length).toFixed(1) : "Chưa có";
-                return `<tr>
-                    <td><b style="color:var(--gold)">★ ${avg}</b> <small>(${p.rates.length})</small></td>
-                    <td>${p.t}</td><td>${p.u}</td><td>${p.c.split(' ').length} từ</td>
-                    <td><button class="btn" onclick="goPost('${p.t}')">Gõ thử</button></td>
-                </tr>`;
-            }).join('');
-        }
-
-        function goPost(title) {
-            let posts = JSON.parse(localStorage.getItem('posts') || "[]");
-            let p = posts.find(x => x.t === title);
-            isCommunityMode = true;
-            currentPostIndex = posts.findIndex(x => x.t === title);
-            document.getElementById('mode-title').innerText = "Cộng đồng: " + p.t;
-            initGame(p.c.split(/\s+/));
-            setTab('tab1');
-        }
-
-        function savePost() {
-            const t = document.getElementById('add-t').value, c = document.getElementById('add-c').value;
-            if(!t || !c) return;
-            let posts = JSON.parse(localStorage.getItem('posts') || "[]");
-            posts.push({ t, c, u: user.u, rates: [] });
-            localStorage.setItem('posts', JSON.stringify(posts));
-            hideModal('modal-add'); drawComm();
-        }
-
-        function submitRate() {
-            if(isCommunityMode && ratingSelected > 0) {
-                let posts = JSON.parse(localStorage.getItem('posts') || "[]");
-                posts[currentPostIndex].rates.push(ratingSelected);
-                localStorage.setItem('posts', JSON.stringify(posts));
-            }
-            hideModal('modal-rate');
-            isCommunityMode = false;
-            document.getElementById('mode-title').innerText = "Luyện tập gõ phím";
-            initGame(Array.from({length: 40}, () => DEFAULT_LIB[Math.floor(Math.random()*DEFAULT_LIB.length)]));
-        }
-
-        // UI HELPERS
-        function setTab(id) {
-            document.querySelectorAll('.tab-box').forEach(b => b.classList.add('hidden'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.remove('hidden');
-            if(id === 'tab3') drawLB();
-            if(id === 'tab4') drawComm();
-            if(id === 'tab-admin') drawAdmin();
-        }
-
-        function drawLB() {
-            let lb = JSON.parse(localStorage.getItem('leaderboard') || "[]");
-            document.getElementById('lb-data').innerHTML = lb.map((s,i)=>`<tr><td>${i+1}</td><td>${s.u}</td><td><b>${s.wpm}</b></td><td>${s.acc}</td><td>${s.date}</td></tr>`).join('');
-        }
-
-        function drawAdmin() {
-            let h = '';
-            for(let i=0; i<localStorage.length; i++) {
-                let k = localStorage.key(i);
-                if(k.startsWith('acc_')) {
-                    let d = JSON.parse(localStorage.getItem(k));
-                    h += `<tr><td>${k.replace('acc_','')}</td><td>${d.e}</td><td>${d.p}</td></tr>`;
-                }
-            }
-            document.getElementById('admin-user-list').innerHTML = h;
-        }
-
-        function showModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function hideModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        // Star logic
-        document.querySelectorAll('.star-btn').forEach(s => {
-            s.onclick = function() {
-                ratingSelected = parseInt(this.dataset.v);
-                document.querySelectorAll('.star-btn').forEach((x, i) => {
-                    x.classList.toggle('active', i < ratingSelected);
-                });
-            }
-        });
-
-        function goCustom() {
-            const val = document.getElementById('custom-val').value.trim();
-            if(!val) return;
-            isCommunityMode = false;
-            initGame(val.split(/\s+/));
-            setTab('tab1');
-        }
-
-        window.onload = () => {
-            if(!user) showModal('modal-auth');
-            else {
-                document.getElementById('u-name').innerText = user.u;
-                document.getElementById('u-mail').innerText = user.e;
-                if(user.isAdmin) {
-                    document.getElementById('admin-gate').classList.remove('hidden');
-                    document.getElementById('admin-live').classList.remove('hidden');
-                    document.getElementById('u-tag').innerHTML = '<span class="admin-tag">CHỦ WEB</span>';
-                    document.getElementById('user-profile-card').classList.add('admin-border');
-                    setInterval(() => { document.getElementById('online-val').innerText = Math.floor(Math.random()*15)+5; }, 4000);
-                }
-                initGame(Array.from({length: 40}, () => DEFAULT_LIB[Math.floor(Math.random()*DEFAULT_LIB.length)]));
-            }
-        };
-    </script>
-</body>
-</html>
+// CSS Chung dùng cho tất cả các file
+const style = document.createElement('style');
+style.innerHTML = `
+    :root { --primary: #2980b9; --bg: #ecf0f1; --gold: #f1c40f; }
+    body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; padding: 20px; gap: 20px; margin: 0; }
+    .sidebar { width: 300px; flex-shrink: 0; }
+    .content { flex-grow: 1; background: white; padding: 30px; border-radius: 12px; min-height: 85vh; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .card { background: white; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; overflow: hidden; }
+    .nav-item { padding: 15px; display: flex; align-items: center; text-decoration: none; color: #555; border-bottom: 1px solid #f1f1f1; transition: 0.2s; }
+    .nav-item:hover { background: #f9f9f9; }
+    .nav-item.active { background: var(--primary); color: white; border: none; }
+    .nav-item i { width: 30px; font-size: 18px; }
+    .admin-badge { background: var(--gold); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: auto; font-weight: bold; }
+    .admin-border { border: 2px solid var(--gold); }
+    .admin-stats { background: #2c3e50 !important; color: white; padding: 20px; text-align: center; }
+    #online-val { font-size: 32px; color: var(--gold); font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; background: var(--primary); color: white; }
+`;
+document.head.appendChild(style);
