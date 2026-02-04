@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hệ Thống Đánh Máy Full Option v8.0</title>
+    <title>Hệ Thống Đánh Máy Chuyên Nghiệp v9.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #2980b9; --bg: #ecf0f1; --gold: #f1c40f; --dark: #2c3e50; --success: #27ae60; --danger: #e74c3c; }
@@ -13,19 +13,19 @@
         .sidebar { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
         .card { background: white; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; }
         .profile-header { padding: 20px; text-align: center; border-bottom: 1px solid #eee; }
-        .avatar { width: 60px; height: 60px; background: var(--dark); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 10px; border: 2px solid transparent; }
+        .avatar { width: 60px; height: 60px; background: var(--dark); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 10px; border: 3px solid transparent; }
         .admin-border .avatar { border-color: var(--gold); }
-        .nav-item { padding: 15px; display: flex; align-items: center; color: #555; border-bottom: 1px solid #f1f1f1; cursor: pointer; transition: 0.2; font-size: 14px; }
+        .nav-item { padding: 15px; display: flex; align-items: center; color: #555; border-bottom: 1px solid #f1f1f1; cursor: pointer; transition: 0.2s; font-size: 14px; }
         .nav-item:hover { background: #f9f9f9; }
         .nav-item.active { background: var(--primary); color: white; }
         .nav-item i { width: 25px; margin-right: 10px; }
 
-        /* Content Area */
+        /* Main Content */
         .main-content { flex-grow: 1; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-y: auto; }
         .page { display: none; }
         .page.active { display: block; }
 
-        /* Typing UI */
+        /* Typing Area */
         .word-display { font-size: 24px; line-height: 1.6; margin-bottom: 15px; color: #999; border: 1px solid #eee; padding: 15px; border-radius: 8px; background: #fafafa; min-height: 120px; }
         .word-active { background: #dcdde1; color: #000; border-radius: 4px; padding: 0 5px; }
         .word-correct { color: var(--success); }
@@ -34,31 +34,32 @@
         .input-style { flex: 1; height: 45px; padding: 10px; font-size: 20px; border-radius: 4px; border: 1px solid #ccc; outline: none; }
         .timer-box { background: #34495e; color: white; width: 80px; display: flex; align-items: center; justify-content: center; font-size: 20px; border-radius: 4px; font-weight: bold; }
 
-        /* Profile Info */
+        /* Profile Details */
         .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f1f1; }
-        .info-val { font-family: monospace; color: #7f8c8d; }
+        .info-val { font-family: monospace; color: #7f8c8d; font-weight: bold; }
 
-        /* Auth */
+        /* Auth Screen */
         #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
         .auth-box { background: white; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         input.form-ctrl { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        
+        .btn-confirm { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .btn-play { background: var(--success); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .btn-play { background: var(--success); color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="auth-screen">
         <div class="auth-box">
-            <h3 id="auth-title" style="text-align:center">Đăng nhập</h3>
+            <h3 id="auth-title" style="text-align:center">Đăng nhập Hệ thống</h3>
             <div id="reg-fields" style="display:none">
-                <input type="email" id="auth-e" class="form-ctrl" placeholder="Nhập Gmail">
+                <input type="email" id="auth-e" class="form-ctrl" placeholder="Địa chỉ Gmail">
             </div>
             <input type="text" id="auth-u" class="form-ctrl" placeholder="Tên đăng nhập">
             <input type="password" id="auth-p" class="form-ctrl" placeholder="Mật khẩu">
-            <button onclick="app.handleAuth()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold">XÁC NHẬN</button>
+            <button onclick="app.handleAuth()" class="btn-confirm">XÁC NHẬN</button>
             <p style="text-align:center; font-size:12px; margin-top:15px; cursor:pointer; color:var(--primary)" onclick="app.toggleAuthMode()">Chuyển Đăng ký / Đăng nhập</p>
         </div>
     </div>
@@ -72,58 +73,58 @@
             <div class="typing-box">
                 <input type="text" id="input-1" class="input-style" placeholder="Bắt đầu gõ..." autocomplete="off">
                 <div id="timer-1" class="timer-box">0:60</div>
-                <button onclick="app.resetTyping()" style="cursor:pointer; padding:0 10px"><i class="fa-solid fa-rotate-right"></i></button>
+                <button onclick="app.resetTyping()" style="cursor:pointer; padding:0 15px; border:none; background:transparent; font-size:20px"><i class="fa-solid fa-rotate-right"></i></button>
             </div>
         </div>
 
         <div id="page-2" class="page">
             <h2>Mục 2: Hướng dẫn 10 ngón</h2>
             <img src="https://vcdn-vnexpress.vnecdn.net/2021/03/17/keyboard-1615969566-8835-1615969623.jpg" style="max-width:100%; border-radius:10px; margin-bottom:15px;">
-            <p>Quy tắc: Luôn đặt ngón trỏ trái vào phím <b>F</b> và ngón trỏ phải vào phím <b>J</b>.</p>
+            <p>Ngón trỏ trái đặt vào phím <b>F</b>, ngón trỏ phải đặt vào phím <b>J</b>. Các ngón khác rải đều trên hàng phím cơ sở.</p>
         </div>
 
         <div id="page-3" class="page">
-            <h2>Mục 3: Bảng xếp hạng Top 100</h2>
-            <table><thead><tr><th>Hạng</th><th>Tên</th><th>WPM</th><th>Ngày đạt</th></tr></thead><tbody id="rank-list"></tbody></table>
+            <h2>Mục 3: Top 100 Cao Thủ</h2>
+            <table><thead><tr><th>Hạng</th><th>Người chơi</th><th>WPM</th><th>Ngày</th></tr></thead><tbody id="rank-list"></tbody></table>
         </div>
 
         <div id="page-4" class="page">
             <div id="comm-list-view">
                 <div style="display:flex; justify-content:space-between; align-items:center">
-                    <h2>Mục 4: Chia sẻ cộng đồng</h2>
-                    <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer">+ Đăng bài</button>
+                    <h2>Mục 4: Cộng đồng chia sẻ</h2>
+                    <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; font-weight:bold">+ Đăng bài</button>
                 </div>
-                <table><thead><tr><th>Tiêu đề</th><th>Người đăng</th><th>Lượt thử</th><th>Thao tác</th></tr></thead><tbody id="comm-list"></tbody></table>
+                <table><thead><tr><th>Tiêu đề bài</th><th>Người đăng</th><th>Lượt thử</th><th>Hành động</th></tr></thead><tbody id="comm-list"></tbody></table>
             </div>
             
             <div id="comm-typing-view" style="display:none">
-                <button onclick="app.closeComm()" style="margin-bottom:10px; cursor:pointer">← Quay lại danh sách</button>
-                <h3 id="comm-title-display"></h3>
+                <button onclick="app.closeComm()" style="margin-bottom:15px; cursor:pointer; padding:5px 10px;">← Quay lại danh sách</button>
+                <h3 id="comm-title-display" style="color:var(--primary)"></h3>
                 <div id="word-display-comm" class="word-display"></div>
                 <div class="typing-box">
-                    <input type="text" id="input-comm" class="input-style" placeholder="Gõ thử tại đây..." autocomplete="off">
+                    <input type="text" id="input-comm" class="input-style" placeholder="Gõ bài chia sẻ tại đây..." autocomplete="off">
                     <div id="timer-comm" class="timer-box">0:60</div>
                 </div>
             </div>
         </div>
 
         <div id="page-profile" class="page">
-            <h2>Hồ sơ cá nhân</h2>
-            <div class="card" style="padding:20px; max-width:450px">
-                <div class="info-row"><span>Tên người dùng:</span> <span class="info-val" id="prof-u"></span></div>
-                <div class="info-row"><span>Gmail:</span> <span class="info-val" id="prof-e"></span></div>
+            <h2>Hồ sơ & Bảo mật</h2>
+            <div class="card" style="padding:25px; max-width:480px">
+                <div class="info-row"><span>Tên đăng nhập:</span> <span class="info-val" id="prof-u"></span></div>
+                <div class="info-row"><span>Gmail liên kết:</span> <span class="info-val" id="prof-e"></span></div>
                 <div class="info-row"><span>Mật khẩu:</span> <span class="info-val" id="prof-p">********</span></div>
                 
-                <h4 style="margin-top:20px; border-top:1px solid #eee; padding-top:15px">Đổi mật khẩu</h4>
-                <input type="password" id="old-pass" class="form-ctrl" placeholder="Nhập mật khẩu cũ">
-                <input type="password" id="new-pass" class="form-ctrl" placeholder="Nhập mật khẩu mới">
-                <button onclick="app.changePass()" class="btn-play" style="width:100%; height:40px">CẬP NHẬT MẬT KHẨU</button>
+                <h4 style="margin-top:25px; border-top:1px solid #eee; padding-top:20px">Đổi mật khẩu</h4>
+                <input type="password" id="old-pass" class="form-ctrl" placeholder="Mật khẩu hiện tại">
+                <input type="password" id="new-pass" class="form-ctrl" placeholder="Mật khẩu mới">
+                <button onclick="app.changePass()" class="btn-confirm" style="margin-top:10px">CẬP NHẬT MẬT KHẨU</button>
             </div>
         </div>
 
         <div id="page-admin" class="page">
-            <h2 style="color:var(--danger)">GOD MODE</h2>
-            <table><thead><tr><th>User</th><th>Pass</th><th>Gmail</th></tr></thead><tbody id="admin-user-list"></tbody></table>
+            <h2 style="color:var(--danger)">QUẢN LÝ TÀI KHOẢN (GOD MODE)</h2>
+            <table><thead><tr><th>Username</th><th>Password</th><th>Gmail</th></tr></thead><tbody id="admin-user-list"></tbody></table>
         </div>
     </div>
 
@@ -146,7 +147,7 @@
 
             toggleAuthMode() {
                 authMode = (authMode === 'login') ? 'register' : 'login';
-                document.getElementById('auth-title').innerText = (authMode === 'login') ? 'Đăng nhập' : 'Đăng ký';
+                document.getElementById('auth-title').innerText = (authMode === 'login') ? 'Đăng nhập Hệ thống' : 'Đăng ký Thành viên';
                 document.getElementById('reg-fields').style.display = (authMode === 'login') ? 'none' : 'block';
             },
 
@@ -154,18 +155,21 @@
                 const u = document.getElementById('auth-u').value.trim();
                 const p = document.getElementById('auth-p').value.trim();
                 const e = document.getElementById('auth-e').value.trim();
-                if(!u || !p) return alert("Vui lòng nhập đủ!");
+                if(!u || !p) return alert("Vui lòng nhập đầy đủ Tên và Mật khẩu!");
 
                 if(authMode === 'register') {
-                    if(localStorage.getItem('user_' + u)) return alert("Tên đã có!");
+                    if(localStorage.getItem('user_' + u)) return alert("Tên đăng nhập đã tồn tại!");
                     localStorage.setItem('user_' + u, JSON.stringify({p, e: e || 'user@gmail.com'}));
-                    alert("Đăng ký xong!"); this.toggleAuthMode();
+                    alert("Đăng ký thành công! Hãy đăng nhập."); this.toggleAuthMode();
                 } else {
-                    let data = localStorage.getItem('user_' + u);
-                    if(u === 'nhtseri' && p === 'admin123' && !data) {
-                        localStorage.setItem('user_nhtseri', JSON.stringify({p:'admin123', e:'admin@gmail.com'}));
-                        data = localStorage.getItem('user_nhtseri');
+                    // Xử lý Admin mặc định
+                    if(u === 'nhtseri' && p === 'admin123') {
+                        if(!localStorage.getItem('user_nhtseri')) {
+                            localStorage.setItem('user_nhtseri', JSON.stringify({p:'admin123', e:'admin@gmail.com'}));
+                        }
                     }
+
+                    let data = localStorage.getItem('user_' + u);
                     if(data) {
                         const parsed = JSON.parse(data);
                         if(parsed.p === p) {
@@ -185,15 +189,15 @@
                             <div class="avatar">${this.user.u[0].toUpperCase()}</div>
                             <b>${this.user.u}</b>
                         </div>
-                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')"><i class="fa-solid fa-user"></i> Hồ sơ</div>
-                        <div class="nav-item" style="color:red" onclick="app.logout()"><i class="fa-solid fa-power-off"></i> Đăng xuất</div>
+                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')"><i class="fa-solid fa-user-gear"></i> Hồ sơ cá nhân</div>
+                        <div class="nav-item" style="color:var(--danger)" onclick="app.logout()"><i class="fa-solid fa-power-off"></i> Đăng xuất</div>
                     </div>
                     <div class="card">
                         <div class="nav-item ${activeId==='page-1'?'active':''}" onclick="app.showPage(1)"><i class="fa-solid fa-keyboard"></i> Mục 1: Tập gõ</div>
-                        <div class="nav-item ${activeId==='page-2'?'active':''}" onclick="app.showPage(2)"><i class="fa-solid fa-book"></i> Mục 2: Hướng dẫn</div>
+                        <div class="nav-item ${activeId==='page-2'?'active':''}" onclick="app.showPage(2)"><i class="fa-solid fa-graduation-cap"></i> Mục 2: Hướng dẫn</div>
                         <div class="nav-item ${activeId==='page-3'?'active':''}" onclick="app.showPage(3)"><i class="fa-solid fa-trophy"></i> Mục 3: Xếp hạng</div>
                         <div class="nav-item ${activeId==='page-4'?'active':''}" onclick="app.showPage(4)"><i class="fa-solid fa-share-nodes"></i> Mục 4: Chia sẻ</div>
-                        ${isAdmin ? `<div class="nav-item ${activeId==='page-admin'?'active':''}" style="background:#fff3cd" onclick="app.showPage('admin')"><i class="fa-solid fa-lock"></i> GOD MODE</div>` : ''}
+                        ${isAdmin ? `<div class="nav-item ${activeId==='page-admin'?'active':''}" style="background:#fff3cd" onclick="app.showPage('admin')"><i class="fa-solid fa-user-shield"></i> GOD MODE</div>` : ''}
                     </div>
                 `;
             },
@@ -205,8 +209,9 @@
                 this.renderSidebar(pid);
                 if(id === 'profile') {
                     const d = JSON.parse(localStorage.getItem('user_' + this.user.u));
-                    document.getElementById('prof-u').innerText = this.user.u.replace(/.(?=.{1})/g, '*');
-                    document.getElementById('prof-e').innerText = d.e.replace(/.(?=.{4})/g, '*');
+                    // Che thông tin bằng dấu sao
+                    document.getElementById('prof-u').innerText = this.user.u.replace(/.(?=.{2})/g, '*');
+                    document.getElementById('prof-e').innerText = d.e.replace(/.(?=.{5})/g, '*');
                 }
                 if(id === 3) this.renderRank();
                 if(id === 4) this.renderComm();
@@ -216,11 +221,13 @@
             changePass() {
                 const oldP = document.getElementById('old-pass').value;
                 const newP = document.getElementById('new-pass').value;
+                if(!oldP || !newP) return alert("Nhập đủ thông tin!");
                 let d = JSON.parse(localStorage.getItem('user_' + this.user.u));
                 if(d.p === oldP) {
-                    d.p = newP; localStorage.setItem('user_' + this.user.u, JSON.stringify(d));
-                    alert("Thành công!");
-                } else alert("Mật khẩu cũ sai!");
+                    d.p = newP; 
+                    localStorage.setItem('user_' + this.user.u, JSON.stringify(d));
+                    alert("Cập nhật mật khẩu thành công!");
+                } else alert("Mật khẩu hiện tại không chính xác!");
             },
 
             resetTyping() {
@@ -248,23 +255,23 @@
                     if(this.timeLeft <= 0) {
                         clearInterval(this.timer);
                         document.getElementById('input-'+suf).disabled = true;
-                        this.saveRank();
+                        this.saveRankResult();
                     }
                 }, 1000);
             },
 
-            saveRank() {
+            saveRankResult() {
                 let rank = JSON.parse(localStorage.getItem('global_ranks') || "[]");
                 rank.push({u: this.user.u, w: this.ok, t: new Date().toLocaleDateString()});
                 rank.sort((a,b) => b.w - a.w);
                 localStorage.setItem('global_ranks', JSON.stringify(rank.slice(0,100)));
-                alert("Hoàn thành! WPM: " + this.ok);
+                alert("Kết thúc! Tốc độ của bạn là: " + this.ok + " WPM");
             },
 
             renderComm() {
                 const posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
                 document.getElementById('comm-list').innerHTML = posts.map((p, idx) => `
-                    <tr><td>${p.t}</td><td>${p.u}</td><td>${p.hits || 0}</td>
+                    <tr><td><b>${p.t}</b></td><td>${p.u}</td><td>${p.hits || 0} lần</td>
                     <td><button class="btn-play" onclick="app.openComm(${idx})">GÕ THỬ</button></td></tr>
                 `).join("");
             },
@@ -276,7 +283,7 @@
                 this.mode = 'comm';
                 document.getElementById('comm-list-view').style.display = 'none';
                 document.getElementById('comm-typing-view').style.display = 'block';
-                document.getElementById('comm-title-display').innerText = "Đang gõ: " + posts[idx].t;
+                document.getElementById('comm-title-display').innerText = "Đang gõ bài: " + posts[idx].t;
                 this.words = posts[idx].c.split(/\s+/);
                 this.resetTyping();
                 this.renderWords('word-display-comm');
@@ -290,7 +297,7 @@
             },
 
             addPost() {
-                const t = prompt("Tiêu đề:"), c = prompt("Nội dung:");
+                const t = prompt("Tiêu đề bài viết:"), c = prompt("Nội dung (các từ cách nhau bởi khoảng trắng):");
                 if(t && c) {
                     let posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
                     posts.push({t, c, u: this.user.u, hits: 0});
@@ -310,7 +317,7 @@
                     let k = localStorage.key(i);
                     if(k.startsWith('user_')) {
                         let d = JSON.parse(localStorage.getItem(k));
-                        h += `<tr><td>${k.replace('user_','')}</td><td>${d.p}</td><td>${d.e}</td></tr>`;
+                        h += `<tr><td><b>${k.replace('user_','')}</b></td><td>${d.p}</td><td>${d.e}</td></tr>`;
                     }
                 }
                 document.getElementById('admin-user-list').innerHTML = h;
@@ -319,7 +326,7 @@
             logout() { localStorage.removeItem('current_session'); location.reload(); }
         };
 
-        const handleInput = (e) => {
+        const handleTypingInput = (e) => {
             if(!app.isPlaying) { app.isPlaying = true; app.startTimer(); }
             if(e.target.value.endsWith(" ")) {
                 const typed = e.target.value.trim();
@@ -333,8 +340,8 @@
             }
         };
 
-        document.getElementById('input-1').addEventListener('input', handleInput);
-        document.getElementById('input-comm').addEventListener('input', handleInput);
+        document.getElementById('input-1').addEventListener('input', handleTypingInput);
+        document.getElementById('input-comm').addEventListener('input', handleTypingInput);
 
         window.onload = () => app.init();
     </script>
