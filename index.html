@@ -2,65 +2,82 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hệ Thống Đánh Máy Chuyên Nghiệp v9.0</title>
+    <title>Hệ Thống Đánh Máy Chuyên Nghiệp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #2980b9; --bg: #ecf0f1; --gold: #f1c40f; --dark: #2c3e50; --success: #27ae60; --danger: #e74c3c; }
-        * { box-sizing: border-box; }
+        :root { --primary: #2980b9; --bg: #f0f2f5; --gold: #f1c40f; --dark: #2c3e50; --success: #27ae60; --danger: #e74c3c; --white: #ffffff; }
+        * { box-sizing: border-box; transition: 0.2s; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; padding: 20px; gap: 20px; margin: 0; height: 100vh; overflow: hidden; }
-        
-        /* Sidebar */
-        .sidebar { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
-        .card { background: white; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; }
-        .profile-header { padding: 20px; text-align: center; border-bottom: 1px solid #eee; }
-        .avatar { width: 60px; height: 60px; background: var(--dark); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 10px; border: 3px solid transparent; }
-        .admin-border .avatar { border-color: var(--gold); }
-        .nav-item { padding: 15px; display: flex; align-items: center; color: #555; border-bottom: 1px solid #f1f1f1; cursor: pointer; transition: 0.2s; font-size: 14px; }
-        .nav-item:hover { background: #f9f9f9; }
-        .nav-item.active { background: var(--primary); color: white; }
-        .nav-item i { width: 25px; margin-right: 10px; }
 
-        /* Main Content */
-        .main-content { flex-grow: 1; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-y: auto; }
-        .page { display: none; }
-        .page.active { display: block; }
+        /* Sidebar & Layout */
+        .sidebar { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
+        .card { background: var(--white); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e0e0e0; }
+        .main-content { flex-grow: 1; background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow-y: auto; position: relative; }
+
+        /* Navigation */
+        .profile-header { padding: 20px; text-align: center; border-bottom: 1px solid #eee; }
+        .avatar { width: 55px; height: 55px; background: var(--dark); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 10px; border: 2px solid var(--gold); }
+        .nav-item { padding: 12px 20px; display: flex; align-items: center; color: #555; cursor: pointer; border-bottom: 1px solid #f9f9f9; }
+        .nav-item:hover { background: #f1f1f1; }
+        .nav-item.active { background: var(--primary); color: white; }
 
         /* Typing Area */
-        .word-display { font-size: 24px; line-height: 1.6; margin-bottom: 15px; color: #999; border: 1px solid #eee; padding: 15px; border-radius: 8px; background: #fafafa; min-height: 120px; }
-        .word-active { background: #dcdde1; color: #000; border-radius: 4px; padding: 0 5px; }
+        .word-display { font-size: 24px; line-height: 1.6; margin-bottom: 20px; border: 2px solid #eee; padding: 20px; border-radius: 10px; background: #fafafa; min-height: 120px; color: #999; }
+        .word-active { background: #dcdde1; color: #000; border-radius: 4px; padding: 0 5px; border-bottom: 2px solid var(--primary); }
         .word-correct { color: var(--success); }
         .word-wrong { background: var(--danger); color: white; border-radius: 4px; padding: 0 5px; }
-        .typing-box { background: #adcce9; padding: 12px; border-radius: 8px; display: flex; gap: 10px; }
-        .input-style { flex: 1; height: 45px; padding: 10px; font-size: 20px; border-radius: 4px; border: 1px solid #ccc; outline: none; }
-        .timer-box { background: #34495e; color: white; width: 80px; display: flex; align-items: center; justify-content: center; font-size: 20px; border-radius: 4px; font-weight: bold; }
+        .typing-box { background: #adcce9; padding: 15px; border-radius: 10px; display: flex; gap: 15px; }
+        .input-style { flex: 1; height: 50px; padding: 10px 15px; border: none; border-radius: 6px; font-size: 20px; outline: none; }
+        .timer-box { background: var(--dark); color: white; width: 80px; display: flex; align-items: center; justify-content: center; font-size: 22px; border-radius: 6px; font-weight: bold; }
 
-        /* Profile Details */
-        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f1f1; }
-        .info-val { font-family: monospace; color: #7f8c8d; font-weight: bold; }
+        /* Modals - Bảng thông báo riêng */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        .modal-box { background: white; padding: 30px; border-radius: 15px; width: 380px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-icon { font-size: 50px; margin-bottom: 15px; }
+        .btn-modal { margin-top: 20px; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; background: var(--primary); color: white; }
 
         /* Auth Screen */
-        #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
-        .auth-box { background: white; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        input.form-ctrl { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        .btn-confirm { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 9998; display: flex; align-items: center; justify-content: center; }
+        .auth-card { background: white; padding: 40px; border-radius: 15px; width: 360px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .auth-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .btn-play { background: var(--success); color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .page { display: none; } .page.active { display: block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
     </style>
 </head>
 <body>
 
-    <div id="auth-screen">
-        <div class="auth-box">
-            <h3 id="auth-title" style="text-align:center">Đăng nhập Hệ thống</h3>
-            <div id="reg-fields" style="display:none">
-                <input type="email" id="auth-e" class="form-ctrl" placeholder="Địa chỉ Gmail">
+    <div id="modal-msg" class="modal-overlay">
+        <div class="modal-box">
+            <div id="m-icon" class="modal-icon"></div>
+            <h3 id="m-title">Thông báo</h3>
+            <p id="m-body"></p>
+            <button class="btn-modal" onclick="app.closeModal()">ĐÓNG</button>
+        </div>
+    </div>
+
+    <div id="modal-result" class="modal-overlay">
+        <div class="modal-box" style="width: 450px;">
+            <div class="modal-icon" style="color: var(--gold)"><i class="fa-solid fa-trophy"></i></div>
+            <h3>KẾT QUẢ CỦA BẠN</h3>
+            <div style="display: flex; justify-content: space-around; margin: 20px 0;">
+                <div><div style="font-size: 30px; font-weight: bold;" id="res-wpm">0</div><small>WPM (Tốc độ)</small></div>
+                <div><div style="font-size: 30px; font-weight: bold;" id="res-acc">0%</div><small>Accuracy (Độ chính xác)</small></div>
             </div>
-            <input type="text" id="auth-u" class="form-ctrl" placeholder="Tên đăng nhập">
-            <input type="password" id="auth-p" class="form-ctrl" placeholder="Mật khẩu">
-            <button onclick="app.handleAuth()" class="btn-confirm">XÁC NHẬN</button>
-            <p style="text-align:center; font-size:12px; margin-top:15px; cursor:pointer; color:var(--primary)" onclick="app.toggleAuthMode()">Chuyển Đăng ký / Đăng nhập</p>
+            <button class="btn-modal" onclick="app.closeResult()">TIẾP TỤC</button>
+        </div>
+    </div>
+
+    <div id="auth-screen">
+        <div class="auth-card">
+            <h2 id="auth-title" style="text-align: center; margin-bottom: 20px;">Đăng nhập</h2>
+            <div id="reg-fields" style="display: none;"><input type="email" id="auth-e" placeholder="Nhập Gmail"></div>
+            <input type="text" id="auth-u" placeholder="Tên đăng nhập">
+            <input type="password" id="auth-p" placeholder="Mật khẩu">
+            <button class="btn-modal" style="width: 100%;" onclick="app.handleAuth()">XÁC NHẬN</button>
+            <p style="text-align: center; font-size: 13px; margin-top: 15px; color: var(--primary); cursor: pointer;" onclick="app.toggleAuth()">Chuyển sang Đăng ký / Đăng nhập</p>
         </div>
     </div>
 
@@ -68,72 +85,56 @@
 
     <div class="main-content">
         <div id="page-1" class="page active">
-            <h2>Mục 1: Tập gõ ngẫu nhiên</h2>
+            <h2>Luyện gõ phím</h2>
             <div id="word-display-1" class="word-display"></div>
             <div class="typing-box">
-                <input type="text" id="input-1" class="input-style" placeholder="Bắt đầu gõ..." autocomplete="off">
-                <div id="timer-1" class="timer-box">0:60</div>
-                <button onclick="app.resetTyping()" style="cursor:pointer; padding:0 15px; border:none; background:transparent; font-size:20px"><i class="fa-solid fa-rotate-right"></i></button>
+                <input type="text" id="input-1" class="input-style" placeholder="Bắt đầu gõ phím tại đây..." autocomplete="off">
+                <div id="timer-1" class="timer-box">60</div>
             </div>
-        </div>
-
-        <div id="page-2" class="page">
-            <h2>Mục 2: Hướng dẫn 10 ngón</h2>
-            <img src="https://vcdn-vnexpress.vnecdn.net/2021/03/17/keyboard-1615969566-8835-1615969623.jpg" style="max-width:100%; border-radius:10px; margin-bottom:15px;">
-            <p>Ngón trỏ trái đặt vào phím <b>F</b>, ngón trỏ phải đặt vào phím <b>J</b>. Các ngón khác rải đều trên hàng phím cơ sở.</p>
-        </div>
-
-        <div id="page-3" class="page">
-            <h2>Mục 3: Top 100 Cao Thủ</h2>
-            <table><thead><tr><th>Hạng</th><th>Người chơi</th><th>WPM</th><th>Ngày</th></tr></thead><tbody id="rank-list"></tbody></table>
         </div>
 
         <div id="page-4" class="page">
             <div id="comm-list-view">
                 <div style="display:flex; justify-content:space-between; align-items:center">
-                    <h2>Mục 4: Cộng đồng chia sẻ</h2>
-                    <button onclick="app.addPost()" style="background:var(--success); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; font-weight:bold">+ Đăng bài</button>
+                    <h2>Cộng đồng chia sẻ</h2>
+                    <button class="btn-modal" style="margin:0" onclick="app.addPost()">+ Đăng bài</button>
                 </div>
-                <table><thead><tr><th>Tiêu đề bài</th><th>Người đăng</th><th>Lượt thử</th><th>Hành động</th></tr></thead><tbody id="comm-list"></tbody></table>
+                <table><thead><tr><th>Tiêu đề</th><th>Người đăng</th><th>Thao tác</th></tr></thead><tbody id="comm-list"></tbody></table>
             </div>
-            
             <div id="comm-typing-view" style="display:none">
-                <button onclick="app.closeComm()" style="margin-bottom:15px; cursor:pointer; padding:5px 10px;">← Quay lại danh sách</button>
-                <h3 id="comm-title-display" style="color:var(--primary)"></h3>
+                <button onclick="app.closeComm()" style="margin-bottom:15px; cursor:pointer">← Quay lại</button>
+                <h3 id="comm-title-display"></h3>
                 <div id="word-display-comm" class="word-display"></div>
                 <div class="typing-box">
-                    <input type="text" id="input-comm" class="input-style" placeholder="Gõ bài chia sẻ tại đây..." autocomplete="off">
-                    <div id="timer-comm" class="timer-box">0:60</div>
+                    <input type="text" id="input-comm" class="input-style" autocomplete="off">
+                    <div id="timer-comm" class="timer-box">60</div>
                 </div>
             </div>
         </div>
 
         <div id="page-profile" class="page">
-            <h2>Hồ sơ & Bảo mật</h2>
-            <div class="card" style="padding:25px; max-width:480px">
-                <div class="info-row"><span>Tên đăng nhập:</span> <span class="info-val" id="prof-u"></span></div>
-                <div class="info-row"><span>Gmail liên kết:</span> <span class="info-val" id="prof-e"></span></div>
-                <div class="info-row"><span>Mật khẩu:</span> <span class="info-val" id="prof-p">********</span></div>
-                
-                <h4 style="margin-top:25px; border-top:1px solid #eee; padding-top:20px">Đổi mật khẩu</h4>
-                <input type="password" id="old-pass" class="form-ctrl" placeholder="Mật khẩu hiện tại">
-                <input type="password" id="new-pass" class="form-ctrl" placeholder="Mật khẩu mới">
-                <button onclick="app.changePass()" class="btn-confirm" style="margin-top:10px">CẬP NHẬT MẬT KHẨU</button>
+            <h2>Hồ sơ cá nhân</h2>
+            <div class="card" style="padding: 25px; max-width: 450px;">
+                <p>Tên người dùng: <b id="prof-u"></b></p>
+                <p>Gmail liên kết: <b id="prof-e"></b></p>
+                <hr>
+                <input type="password" id="new-p" class="input-style" style="border: 1px solid #ddd; margin-bottom: 10px; width:100%" placeholder="Mật khẩu mới">
+                <button class="btn-modal" style="width: 100%;" onclick="app.updatePass()">ĐỔI MẬT KHẨU</button>
             </div>
         </div>
 
         <div id="page-admin" class="page">
-            <h2 style="color:var(--danger)">QUẢN LÝ TÀI KHOẢN (GOD MODE)</h2>
-            <table><thead><tr><th>Username</th><th>Password</th><th>Gmail</th></tr></thead><tbody id="admin-user-list"></tbody></table>
+            <h2>QUẢN TRỊ VIÊN (GOD MODE)</h2>
+            <table><thead><tr><th>User</th><th>Pass</th><th>Gmail</th></tr></thead><tbody id="admin-list"></tbody></table>
         </div>
     </div>
 
     <script>
-        const DICT = "chào|học|sinh|tôi|vận|động|viên|nhà|trường|học|chạy|trình|ai|anh|cười|em|ngày|bão|xã|hội|đất".split('|');
+        const DICT = "tôi|đi|học|mỗi|ngày|bàn|phím|máy|tính|nhanh|thành|công|chính|xác|tốc|độ|luyện|tập".split('|');
         let authMode = 'login';
 
         const app = {
-            user: null, words: [], curIdx: 0, timeLeft: 60, timer: null, isPlaying: false, ok: 0, mode: '1',
+            user: null, words: [], curIdx: 0, timeLeft: 60, timer: null, isPlaying: false, ok: 0, errors: 0, mode: '1',
 
             init() {
                 const session = localStorage.getItem('current_session');
@@ -145,96 +146,83 @@
                 }
             },
 
-            toggleAuthMode() {
+            showModal(title, body, type) {
+                const icon = document.getElementById('m-icon');
+                if(type === 'success') { icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>'; icon.style.color = 'var(--success)'; }
+                else { icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'; icon.style.color = 'var(--danger)'; }
+                document.getElementById('m-title').innerText = title;
+                document.getElementById('m-body').innerText = body;
+                document.getElementById('modal-msg').style.display = 'flex';
+            },
+
+            closeModal() { document.getElementById('modal-msg').style.display = 'none'; },
+
+            toggleAuth() {
                 authMode = (authMode === 'login') ? 'register' : 'login';
-                document.getElementById('auth-title').innerText = (authMode === 'login') ? 'Đăng nhập Hệ thống' : 'Đăng ký Thành viên';
+                document.getElementById('auth-title').innerText = (authMode === 'login') ? 'Đăng nhập' : 'Đăng ký';
                 document.getElementById('reg-fields').style.display = (authMode === 'login') ? 'none' : 'block';
             },
 
             handleAuth() {
-                const u = document.getElementById('auth-u').value.trim();
-                const p = document.getElementById('auth-p').value.trim();
-                const e = document.getElementById('auth-e').value.trim();
-                if(!u || !p) return alert("Vui lòng nhập đầy đủ Tên và Mật khẩu!");
+                const u = document.getElementById('auth-u').value.trim(), p = document.getElementById('auth-p').value.trim(), e = document.getElementById('auth-e').value.trim();
+                if(!u || !p) return this.showModal("Lỗi", "Vui lòng nhập đầy đủ thông tin!", "error");
 
                 if(authMode === 'register') {
-                    if(localStorage.getItem('user_' + u)) return alert("Tên đăng nhập đã tồn tại!");
-                    localStorage.setItem('user_' + u, JSON.stringify({p, e: e || 'user@gmail.com'}));
-                    alert("Đăng ký thành công! Hãy đăng nhập."); this.toggleAuthMode();
+                    if(localStorage.getItem('user_'+u)) return this.showModal("Lỗi", "Tài khoản này đã tồn tại!", "error");
+                    localStorage.setItem('user_'+u, JSON.stringify({p, e: e || 'user@gmail.com'}));
+                    this.showModal("Thành công", "Đã đăng ký tài khoản thành công!", "success");
+                    this.toggleAuth();
                 } else {
-                    // Xử lý Admin mặc định
-                    if(u === 'nhtseri' && p === 'admin123') {
-                        if(!localStorage.getItem('user_nhtseri')) {
-                            localStorage.setItem('user_nhtseri', JSON.stringify({p:'admin123', e:'admin@gmail.com'}));
-                        }
+                    if(u === 'nhtseri' && p === 'admin123') { // Hardfix Admin
+                        if(!localStorage.getItem('user_nhtseri')) localStorage.setItem('user_nhtseri', JSON.stringify({p:'admin123', e:'admin@gmail.com'}));
                     }
-
-                    let data = localStorage.getItem('user_' + u);
+                    const data = localStorage.getItem('user_'+u);
                     if(data) {
-                        const parsed = JSON.parse(data);
-                        if(parsed.p === p) {
-                            this.user = {u, e: parsed.e, isAdmin: (u === 'nhtseri')};
+                        const d = JSON.parse(data);
+                        if(d.p === p) {
+                            this.user = {u, e: d.e, isAdmin: (u === 'nhtseri')};
                             localStorage.setItem('current_session', JSON.stringify(this.user));
-                            location.reload();
-                        } else alert("Sai mật khẩu!");
-                    } else alert("Tài khoản không tồn tại!");
+                            // Thông báo thành công trước khi load lại
+                            this.showModal("Thành công", "Đăng nhập thành công! Đang vào hệ thống...", "success");
+                            setTimeout(() => location.reload(), 1000);
+                        } else this.showModal("Thất bại", "Sai mật khẩu, vui lòng kiểm tra lại!", "error");
+                    } else this.showModal("Thất bại", "Tài khoản không tồn tại trên hệ thống!", "error");
                 }
             },
 
             renderSidebar(activeId) {
-                const isAdmin = this.user.isAdmin;
                 document.getElementById('sidebar-inject').innerHTML = `
-                    <div class="card ${isAdmin ? 'admin-border' : ''}">
+                    <div class="card">
                         <div class="profile-header">
                             <div class="avatar">${this.user.u[0].toUpperCase()}</div>
                             <b>${this.user.u}</b>
                         </div>
-                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')"><i class="fa-solid fa-user-gear"></i> Hồ sơ cá nhân</div>
-                        <div class="nav-item" style="color:var(--danger)" onclick="app.logout()"><i class="fa-solid fa-power-off"></i> Đăng xuất</div>
-                    </div>
-                    <div class="card">
-                        <div class="nav-item ${activeId==='page-1'?'active':''}" onclick="app.showPage(1)"><i class="fa-solid fa-keyboard"></i> Mục 1: Tập gõ</div>
-                        <div class="nav-item ${activeId==='page-2'?'active':''}" onclick="app.showPage(2)"><i class="fa-solid fa-graduation-cap"></i> Mục 2: Hướng dẫn</div>
-                        <div class="nav-item ${activeId==='page-3'?'active':''}" onclick="app.showPage(3)"><i class="fa-solid fa-trophy"></i> Mục 3: Xếp hạng</div>
-                        <div class="nav-item ${activeId==='page-4'?'active':''}" onclick="app.showPage(4)"><i class="fa-solid fa-share-nodes"></i> Mục 4: Chia sẻ</div>
-                        ${isAdmin ? `<div class="nav-item ${activeId==='page-admin'?'active':''}" style="background:#fff3cd" onclick="app.showPage('admin')"><i class="fa-solid fa-user-shield"></i> GOD MODE</div>` : ''}
+                        <div class="nav-item ${activeId==='page-profile'?'active':''}" onclick="app.showPage('profile')">Hồ sơ</div>
+                        <div class="nav-item ${activeId==='page-1'?'active':''}" onclick="app.showPage(1)">Tập gõ</div>
+                        <div class="nav-item ${activeId==='page-4'?'active':''}" onclick="app.showPage(4)">Cộng đồng</div>
+                        ${this.user.isAdmin ? `<div class="nav-item ${activeId==='page-admin'?'active':''}" style="color:var(--gold)" onclick="app.showPage('admin')">GOD MODE</div>` : ''}
+                        <div class="nav-item" style="color:var(--danger)" onclick="app.logout()">Đăng xuất</div>
                     </div>
                 `;
             },
 
             showPage(id) {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                const pid = (typeof id === 'string') ? 'page-'+id : 'page-'+id;
+                const pid = 'page-'+id;
                 document.getElementById(pid).classList.add('active');
                 this.renderSidebar(pid);
                 if(id === 'profile') {
-                    const d = JSON.parse(localStorage.getItem('user_' + this.user.u));
-                    // Che thông tin bằng dấu sao
-                    document.getElementById('prof-u').innerText = this.user.u.replace(/.(?=.{2})/g, '*');
-                    document.getElementById('prof-e').innerText = d.e.replace(/.(?=.{5})/g, '*');
+                    document.getElementById('prof-u').innerText = this.user.u;
+                    document.getElementById('prof-e').innerText = this.user.e.replace(/.(?=.{4})/g, '*');
                 }
-                if(id === 3) this.renderRank();
                 if(id === 4) this.renderComm();
                 if(id === 'admin') this.renderAdmin();
             },
 
-            changePass() {
-                const oldP = document.getElementById('old-pass').value;
-                const newP = document.getElementById('new-pass').value;
-                if(!oldP || !newP) return alert("Nhập đủ thông tin!");
-                let d = JSON.parse(localStorage.getItem('user_' + this.user.u));
-                if(d.p === oldP) {
-                    d.p = newP; 
-                    localStorage.setItem('user_' + this.user.u, JSON.stringify(d));
-                    alert("Cập nhật mật khẩu thành công!");
-                } else alert("Mật khẩu hiện tại không chính xác!");
-            },
-
             resetTyping() {
-                clearInterval(this.timer);
-                this.timeLeft = 60; this.curIdx = 0; this.isPlaying = false; this.ok = 0;
+                clearInterval(this.timer); this.timeLeft = 60; this.curIdx = 0; this.isPlaying = false; this.ok = 0; this.errors = 0;
                 const suf = (this.mode === '1') ? '1' : 'comm';
-                document.getElementById('timer-'+suf).innerText = "0:60";
+                document.getElementById('timer-'+suf).innerText = "60";
                 document.getElementById('input-'+suf).value = "";
                 document.getElementById('input-'+suf).disabled = false;
                 if(this.mode === '1') {
@@ -251,98 +239,83 @@
                 this.timer = setInterval(() => {
                     this.timeLeft--;
                     const suf = (this.mode === '1') ? '1' : 'comm';
-                    document.getElementById('timer-'+suf).innerText = `0:${this.timeLeft < 10 ? '0' : ''}${this.timeLeft}`;
-                    if(this.timeLeft <= 0) {
-                        clearInterval(this.timer);
-                        document.getElementById('input-'+suf).disabled = true;
-                        this.saveRankResult();
-                    }
+                    document.getElementById('timer-'+suf).innerText = this.timeLeft;
+                    if(this.timeLeft <= 0) this.finishTyping();
                 }, 1000);
             },
 
-            saveRankResult() {
-                let rank = JSON.parse(localStorage.getItem('global_ranks') || "[]");
-                rank.push({u: this.user.u, w: this.ok, t: new Date().toLocaleDateString()});
-                rank.sort((a,b) => b.w - a.w);
-                localStorage.setItem('global_ranks', JSON.stringify(rank.slice(0,100)));
-                alert("Kết thúc! Tốc độ của bạn là: " + this.ok + " WPM");
+            finishTyping() {
+                clearInterval(this.timer);
+                const total = this.ok + this.errors;
+                const accuracy = total > 0 ? Math.round((this.ok / total) * 100) : 0;
+                document.getElementById('res-wpm').innerText = this.ok;
+                document.getElementById('res-acc').innerText = accuracy + "%";
+                document.getElementById('modal-result').style.display = 'flex';
+                const suf = (this.mode === '1') ? '1' : 'comm';
+                document.getElementById('input-'+suf).disabled = true;
             },
+
+            closeResult() { document.getElementById('modal-result').style.display = 'none'; this.resetTyping(); },
 
             renderComm() {
                 const posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
-                document.getElementById('comm-list').innerHTML = posts.map((p, idx) => `
-                    <tr><td><b>${p.t}</b></td><td>${p.u}</td><td>${p.hits || 0} lần</td>
-                    <td><button class="btn-play" onclick="app.openComm(${idx})">GÕ THỬ</button></td></tr>
-                `).join("");
+                document.getElementById('comm-list').innerHTML = posts.map((p, idx) => `<tr><td><b>${p.t}</b></td><td>${p.u}</td><td><button class="btn-modal" style="padding:5px 10px; margin:0" onclick="app.openComm(${idx})">GÕ THỬ</button></td></tr>`).join("");
             },
 
             openComm(idx) {
-                let posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
-                posts[idx].hits = (posts[idx].hits || 0) + 1;
-                localStorage.setItem('posts_list', JSON.stringify(posts));
+                const p = JSON.parse(localStorage.getItem('posts_list'))[idx];
                 this.mode = 'comm';
                 document.getElementById('comm-list-view').style.display = 'none';
                 document.getElementById('comm-typing-view').style.display = 'block';
-                document.getElementById('comm-title-display').innerText = "Đang gõ bài: " + posts[idx].t;
-                this.words = posts[idx].c.split(/\s+/);
-                this.resetTyping();
-                this.renderWords('word-display-comm');
+                document.getElementById('comm-title-display').innerText = "Đang gõ: " + p.t;
+                this.words = p.c.split(/\s+/);
+                this.resetTyping(); this.renderWords('word-display-comm');
             },
 
-            closeComm() {
-                this.mode = '1';
-                document.getElementById('comm-list-view').style.display = 'block';
-                document.getElementById('comm-typing-view').style.display = 'none';
-                this.renderComm();
-            },
+            closeComm() { this.mode = '1'; document.getElementById('comm-list-view').style.display = 'block'; document.getElementById('comm-typing-view').style.display = 'none'; this.renderComm(); },
 
             addPost() {
-                const t = prompt("Tiêu đề bài viết:"), c = prompt("Nội dung (các từ cách nhau bởi khoảng trắng):");
+                const t = prompt("Tiêu đề bài gõ:"), c = prompt("Nội dung gõ:");
                 if(t && c) {
                     let posts = JSON.parse(localStorage.getItem('posts_list') || "[]");
-                    posts.push({t, c, u: this.user.u, hits: 0});
+                    posts.push({t, c, u: this.user.u});
                     localStorage.setItem('posts_list', JSON.stringify(posts));
                     this.renderComm();
                 }
             },
 
-            renderRank() {
-                const data = JSON.parse(localStorage.getItem('global_ranks') || "[]");
-                document.getElementById('rank-list').innerHTML = data.map((r,i) => `<tr><td>#${i+1}</td><td>${r.u}</td><td>${r.w}</td><td>${r.t}</td></tr>`).join("");
-            },
-
             renderAdmin() {
                 let h = '';
-                for(let i=0; i<localStorage.length; i++) {
+                for(let i=0; i<localStorage.length; i++){
                     let k = localStorage.key(i);
-                    if(k.startsWith('user_')) {
+                    if(k.startsWith('user_')){
                         let d = JSON.parse(localStorage.getItem(k));
-                        h += `<tr><td><b>${k.replace('user_','')}</b></td><td>${d.p}</td><td>${d.e}</td></tr>`;
+                        h += `<tr><td>${k.replace('user_','')}</td><td>${d.p}</td><td>${d.e}</td></tr>`;
                     }
                 }
-                document.getElementById('admin-user-list').innerHTML = h;
+                document.getElementById('admin-list').innerHTML = h;
             },
 
             logout() { localStorage.removeItem('current_session'); location.reload(); }
         };
 
-        const handleTypingInput = (e) => {
+        const handleInput = (e) => {
             if(!app.isPlaying) { app.isPlaying = true; app.startTimer(); }
             if(e.target.value.endsWith(" ")) {
                 const typed = e.target.value.trim();
                 const el = document.getElementById(`w-${app.mode}-${app.curIdx}`);
                 if(typed === app.words[app.curIdx]) { el.className = "word-correct"; app.ok++; }
-                else el.className = "word-wrong";
+                else { el.className = "word-wrong"; app.errors++; }
                 app.curIdx++;
                 const next = document.getElementById(`w-${app.mode}-${app.curIdx}`);
                 if(next) next.className = "word-active";
                 e.target.value = "";
+                if(app.curIdx >= app.words.length) app.finishTyping();
             }
         };
 
-        document.getElementById('input-1').addEventListener('input', handleTypingInput);
-        document.getElementById('input-comm').addEventListener('input', handleTypingInput);
-
+        document.getElementById('input-1').addEventListener('input', handleInput);
+        document.getElementById('input-comm').addEventListener('input', handleInput);
         window.onload = () => app.init();
     </script>
 </body>
